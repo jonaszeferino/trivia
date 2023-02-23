@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
-import ErrorPage from "./error-page";
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -12,7 +11,7 @@ function shuffle(array) {
 
 export default function Reservations() {
   let [answers, setAnswers] = useState({ questions: [] });
-  let [isError, setError] = useState(false);
+
   let [selectedAnswer, setSelectedAnswer] = useState(null);
   let [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
 

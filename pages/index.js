@@ -5,11 +5,13 @@ export default function Reservations() {
   const [answers, setAnswers] = useState({ questions: [] });
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [resultsAnswer, setResultsAnswer] = useState("");
+  const [categories, setCategories] = useState("");
+  const [difficulty, setDifficult] = useState("");
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [resultado, setResultado] = useState("");
 
   const apiCall = () => {
-    const url = `https://the-trivia-api.com/api/questions?limit=1&categories=science,history`;
+    const url = `https://the-trivia-api.com/api/questions?limit=1&categories=science,history&difficulty=hard`;
     setResultsAnswer("");
     setSelectedAnswer("");
     setResultado("");
@@ -53,19 +55,19 @@ export default function Reservations() {
     if (answers.questions[0]?.correctAnswer) {
       switch (shuffledAnswers.indexOf(answers.questions[0]?.correctAnswer)) {
         case 0:
-          resultAnswer = "Correta Letra A";
+          resultAnswer = `Correta Letra A: ${answers.questions[0]?.correctAnswer}`;
           setResultado("A");
           break;
         case 1:
-          resultAnswer = "Correta Letra B";
+          resultAnswer = `Correta Letra B: ${answers.questions[0]?.correctAnswer}`;
           setResultado("B");
           break;
         case 2:
-          resultAnswer = "Correta Letra C";
+          resultAnswer = `Correta Letra C: ${answers.questions[0]?.correctAnswer}`;
           setResultado("C");
           break;
         case 3:
-          resultAnswer = "Correta Letra D";
+          resultAnswer = `Correta Letra D: ${answers.questions[0]?.correctAnswer}`;
           setResultado("D");
           break;
         default:
@@ -88,12 +90,13 @@ export default function Reservations() {
           <button className={styles.card} onClick={apiCall}>
             Gerar Questões
           </button>
+          <br />
         </div>
         <br />
-        <div>
-          <span> Resultado: {resultsAnswer}</span>
-        </div>
       </h2>
+      <div className={styles.grid}>
+        <span> Resultado: {resultsAnswer}</span>
+      </div>
 
       <div className={styles.grid}>
         <div>
@@ -109,77 +112,46 @@ export default function Reservations() {
 
                   <span>
                     <button
+                      className={styles.card}
                       onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
-                      style={{
-                        backgroundColor:
-                          resultado === "A"
-                            ? "green"
-                            : resultado !== null
-                            ? "red"
-                            : "initial",
-
-                        backgroundColor:
-                          resultado === null ? "blue" : "initial",
-                      }}
                     >
                       A
                     </button>{" "}
-                    {shuffledAnswers[0]}
+                    <span className={styles.card}> {shuffledAnswers[0]}</span>
                   </span>
                   <br />
                   <span>
                     <button
+                      className={styles.card}
                       onClick={() => getResultAnswer(shuffledAnswers[1], "B")}
-                      style={{
-                        backgroundColor:
-                          resultsAnswer === "Correta Letra B"
-                            ? "green"
-                            : resultsAnswer === "Letra B"
-                            ? "red"
-                            : "initial",
-                      }}
                     >
                       B
                     </button>{" "}
-                    {shuffledAnswers[1]}
+                    <span className={styles.card}>{shuffledAnswers[1]}</span>
                   </span>
                   <br />
                   <span>
                     <button
+                      className={styles.card}
                       onClick={() => getResultAnswer(shuffledAnswers[2], "C")}
-                      style={{
-                        backgroundColor:
-                          resultsAnswer === "Correta Letra C"
-                            ? "green"
-                            : resultsAnswer === "Letra C"
-                            ? "red"
-                            : "initial",
-                      }}
                     >
                       C
                     </button>{" "}
-                    {shuffledAnswers[2]}
+                    <span className={styles.card}>{shuffledAnswers[2]}</span>
                   </span>
                   <br />
                   <span>
                     <button
+                      className={styles.card}
                       onClick={() => getResultAnswer(shuffledAnswers[3], "D")}
-                      style={{
-                        backgroundColor:
-                          resultsAnswer === "Correta Letra D"
-                            ? "green"
-                            : resultsAnswer === "Letra D"
-                            ? "red"
-                            : "initial",
-                      }}
                     >
                       D
                     </button>{" "}
-                    {shuffledAnswers[3]}
+                    <span className={styles.card}> {shuffledAnswers[3]} </span>
                   </span>
                   <br />
 
-                  <span>Correta: {answers.questions[0]?.correctAnswer}</span>
+                  {/* <span>Correta: {answers.questions[0]?.correctAnswer}</span> */}
 
                   <br />
                 </div>
