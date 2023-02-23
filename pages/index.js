@@ -112,7 +112,7 @@ export default function Reservations() {
 
                   <span>
                     <button
-                      className={styles.card}
+                      className={styles.button}
                       onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
                     >
                       A
@@ -122,7 +122,7 @@ export default function Reservations() {
                   <br />
                   <span>
                     <button
-                      className={styles.card}
+                      className={styles.button}
                       onClick={() => getResultAnswer(shuffledAnswers[1], "B")}
                     >
                       B
@@ -132,7 +132,7 @@ export default function Reservations() {
                   <br />
                   <span>
                     <button
-                      className={styles.card}
+                      className={styles.button}
                       onClick={() => getResultAnswer(shuffledAnswers[2], "C")}
                     >
                       C
@@ -142,7 +142,7 @@ export default function Reservations() {
                   <br />
                   <span>
                     <button
-                      className={styles.card}
+                      className={styles.button}
                       onClick={() => getResultAnswer(shuffledAnswers[3], "D")}
                     >
                       D

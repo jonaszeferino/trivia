@@ -156,3 +156,35 @@
   background-color: #63bf57;
   text-align: center;
 }
+
+.button {
+  background-color: antiquewhite;
+  margin: 1rem;
+  padding: 1rem;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  max-width: 400px;
+}
+
+.button:hover,
+.button:focus,
+.button:active {
+  color: #000000;
+  border-color: #3f14a5;
+  background-color: #0070f3;
+}
+
+.button h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.button p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
