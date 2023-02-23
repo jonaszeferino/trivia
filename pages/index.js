@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
-import ErrorPage from "./error-page";
 
 export default function Reservations() {
-  // let [quotes, setQuotes] = useState();
-  let [answers, setAnswers] = useState({ questions: [] });
-  let [isError, setError] = useState(false);
+  const [answers, setAnswers] = useState({ questions: [] });
+  const [shuffledAnswers, setShuffledAnswers] = useState([]);
+  const [resultsAnswer, setResultsAnswer] = useState("");
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [resultado, setResultado] = useState("");
 
-  const apiCall = (event) => {
+  const apiCall = () => {
     const url = `https://the-trivia-api.com/api/questions?limit=1&categories=science,history`;
-    setError(false);
+    setResultsAnswer("");
+    setSelectedAnswer("");
+    setResultado("");
 
     fetch(url)
       .then((response) => {
@@ -32,19 +35,66 @@ export default function Reservations() {
       .catch((error) => setError(true));
   };
 
+  useEffect(() => {
+    const allAnswers = [
+      answers.questions[0]?.incorrectAnswers[0],
+      answers.questions[0]?.incorrectAnswers[1],
+      answers.questions[0]?.incorrectAnswers[2],
+      answers.questions[0]?.correctAnswer,
+    ];
+    const newShuffledAnswers = allAnswers
+      .slice()
+      .sort(() => Math.random() - 0.5);
+    setShuffledAnswers(newShuffledAnswers);
+  }, [answers]);
+
+  function getResultAnswer() {
+    let resultAnswer = "";
+    if (answers.questions[0]?.correctAnswer) {
+      switch (shuffledAnswers.indexOf(answers.questions[0]?.correctAnswer)) {
+        case 0:
+          resultAnswer = "Correta Letra A";
+          setResultado("A");
+          break;
+        case 1:
+          resultAnswer = "Correta Letra B";
+          setResultado("B");
+          break;
+        case 2:
+          resultAnswer = "Correta Letra C";
+          setResultado("C");
+          break;
+        case 3:
+          resultAnswer = "Correta Letra D";
+          setResultado("D");
+          break;
+        default:
+          resultAnswer = "";
+      }
+    }
+    setResultsAnswer(resultAnswer);
+  }
+
+  function handleSelectAnswer(answer) {
+    setSelectedAnswer(answer);
+  }
+
   return (
     <div>
       <h1 className={styles.grid}>Trivia</h1>
       <h2 className={styles.grid}>
         <br />
-        <button className={styles.card} onClick={apiCall}>
-          Gerar Questões
-        </button>
+        <div>
+          <button className={styles.card} onClick={apiCall}>
+            Gerar Questões
+          </button>
+        </div>
+        <br />
+        <div>
+          <span> Resultado: {resultsAnswer}</span>
+        </div>
       </h2>
 
-      {/* {isError === true ? (
-        <ErrorPage message={`Verifique as Credenciais`}></ErrorPage>
-      ) : ( */}
       <div className={styles.grid}>
         <div>
           <br />
@@ -56,24 +106,81 @@ export default function Reservations() {
                 <div>
                   <br />
                   <h2>{answers.questions[0]?.question}</h2>
+
                   <span>
-                    <button>A</button> {answers.questions[0]?.correctAnswer}
+                    <button
+                      onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
+                      style={{
+                        backgroundColor:
+                          resultado === "A"
+                            ? "green"
+                            : resultado !== null
+                            ? "red"
+                            : "initial",
+
+                        backgroundColor:
+                          resultado === null ? "blue" : "initial",
+                      }}
+                    >
+                      A
+                    </button>{" "}
+                    {shuffledAnswers[0]}
                   </span>
                   <br />
                   <span>
-                    <button>B</button>{" "}
-                    {answers.questions[0]?.incorrectAnswers[0]}
+                    <button
+                      onClick={() => getResultAnswer(shuffledAnswers[1], "B")}
+                      style={{
+                        backgroundColor:
+                          resultsAnswer === "Correta Letra B"
+                            ? "green"
+                            : resultsAnswer === "Letra B"
+                            ? "red"
+                            : "initial",
+                      }}
+                    >
+                      B
+                    </button>{" "}
+                    {shuffledAnswers[1]}
                   </span>
                   <br />
                   <span>
-                    <button>C</button>{" "}
-                    {answers.questions[0]?.incorrectAnswers[1]}
+                    <button
+                      onClick={() => getResultAnswer(shuffledAnswers[2], "C")}
+                      style={{
+                        backgroundColor:
+                          resultsAnswer === "Correta Letra C"
+                            ? "green"
+                            : resultsAnswer === "Letra C"
+                            ? "red"
+                            : "initial",
+                      }}
+                    >
+                      C
+                    </button>{" "}
+                    {shuffledAnswers[2]}
                   </span>
                   <br />
                   <span>
-                    <button>D</button>{" "}
-                    {answers.questions[0]?.incorrectAnswers[2]}
+                    <button
+                      onClick={() => getResultAnswer(shuffledAnswers[3], "D")}
+                      style={{
+                        backgroundColor:
+                          resultsAnswer === "Correta Letra D"
+                            ? "green"
+                            : resultsAnswer === "Letra D"
+                            ? "red"
+                            : "initial",
+                      }}
+                    >
+                      D
+                    </button>{" "}
+                    {shuffledAnswers[3]}
                   </span>
+                  <br />
+
+                  <span>Correta: {answers.questions[0]?.correctAnswer}</span>
+
                   <br />
                 </div>
               </div>
@@ -81,7 +188,6 @@ export default function Reservations() {
           </div>
         </div>
       </div>
-      {/* )} */}
     </div>
   );
 }
