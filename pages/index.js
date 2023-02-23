@@ -51,30 +51,13 @@ export default function Reservations() {
   }, [answers]);
 
   function getResultAnswer() {
-    let resultAnswer = "";
-    if (answers.questions[0]?.correctAnswer) {
-      switch (shuffledAnswers.indexOf(answers.questions[0]?.correctAnswer)) {
-        case 0:
-          resultAnswer = `Correta Letra A: ${answers.questions[0]?.correctAnswer}`;
-          setResultado("A");
-          break;
-        case 1:
-          resultAnswer = `Correta Letra B: ${answers.questions[0]?.correctAnswer}`;
-          setResultado("B");
-          break;
-        case 2:
-          resultAnswer = `Correta Letra C: ${answers.questions[0]?.correctAnswer}`;
-          setResultado("C");
-          break;
-        case 3:
-          resultAnswer = `Correta Letra D: ${answers.questions[0]?.correctAnswer}`;
-          setResultado("D");
-          break;
-        default:
-          resultAnswer = "";
-      }
+    if (selectedAnswer === answers.questions[0]?.correctAnswer) {
+      setResultsAnswer("Você escolheu a resposta correta!");
+    } else {
+      setResultsAnswer(
+        `Você escolheu a resposta incorreta. A resposta correta é ${answers.questions[0]?.correctAnswer}`
+      );
     }
-    setResultsAnswer(resultAnswer);
   }
 
   function handleSelectAnswer(answer) {
