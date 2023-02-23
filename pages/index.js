@@ -9,12 +9,16 @@ export default function Reservations() {
   const [difficulty, setDifficult] = useState("");
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [resultado, setResultado] = useState("");
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [totalWrongQuestions, setTotalWrongQuestions] = useState(0);
+  const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
 
   const apiCall = () => {
-    const url = `https://the-trivia-api.com/api/questions?limit=1&categories=science,history&difficulty=hard`;
+    const url = `https://the-trivia-api.com/api/questions?limit=1&categories=science,history&difficulty=easy`;
     setResultsAnswer("");
     setSelectedAnswer("");
     setResultado("");
+    setTotalQuestions(totalQuestions + 1);
 
     fetch(url)
       .then((response) => {
@@ -50,13 +54,19 @@ export default function Reservations() {
     setShuffledAnswers(newShuffledAnswers);
   }, [answers]);
 
-  function getResultAnswer() {
-    if (selectedAnswer === answers.questions[0]?.correctAnswer) {
+  // function getResultAnswer() {
+  //   const correctAnswerIndex = shuffledAnswers.indexOf(answers.questions[0]?.correctAnswer
+  //   );
+
+  function getResultAnswer(recebido, questao) {
+    if (recebido === answers.questions[0]?.correctAnswer) {
       setResultsAnswer("Você escolheu a resposta correta!");
+      setTotalCorrectQuestions(totalCorrectQuestions + 1);
     } else {
       setResultsAnswer(
-        `Você escolheu a resposta incorreta. A resposta correta é ${answers.questions[0]?.correctAnswer}`
+        `Você escolheu a resposta ${questao}. A resposta correta é ${answers.questions[0]?.correctAnswer}`
       );
+      setTotalWrongQuestions(totalWrongQuestions + 1);
     }
   }
 
@@ -135,6 +145,11 @@ export default function Reservations() {
                   <br />
 
                   {/* <span>Correta: {answers.questions[0]?.correctAnswer}</span> */}
+
+                  <span>
+                    Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
+                    Wrong: {totalWrongQuestions}
+                  </span>
 
                   <br />
                 </div>
