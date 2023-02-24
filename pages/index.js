@@ -182,14 +182,10 @@ export default function Reservations() {
       </div>
       <div className={styles.grid}>
         <div>
-          <br />
           <div>
-            <br />
             {answers.questions.length > 0 && (
               <div>
-                <br />
                 <div>
-                  <br />
                   <h2>
                     <button className={styles.card_text} onClick={apiCall}>
                       Next Question
