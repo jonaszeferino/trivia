@@ -125,8 +125,10 @@ export default function Reservations() {
           <button onClick={toggleCategoryOptions} className={styles.card}>
             Options
           </button>
+
           {showCategoryOptions && (
             <div className="teste">
+              <span>Areas:</span>
               {categoryOptions.map((category, index) => (
                 <div key={index}>
                   <input
@@ -148,6 +150,7 @@ export default function Reservations() {
                 </div>
               ))}
               <span>
+                <span>Difficulty:</span>
                 <div>
                   {difficultyOptions.map((difficulty, index) => (
                     <div key={index}>
