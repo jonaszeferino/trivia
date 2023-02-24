@@ -118,11 +118,11 @@ export default function Reservations() {
       <h2 className={styles.grid}>
         <br />
         <div>
-          <button className={styles.card} onClick={apiCall}>
+          <button className={styles.button} onClick={apiCall}>
             Start
           </button>
 
-          <button onClick={toggleCategoryOptions} className={styles.card}>
+          <button onClick={toggleCategoryOptions} className={styles.button}>
             Options
           </button>
 
@@ -197,14 +197,18 @@ export default function Reservations() {
                   <h2 className={styles.card_text}>
                     {answers.questions[0]?.question}
                   </h2>
-                  <span>
-                    Difficulty:
-                    <strong> {answers.questions[0]?.difficulty} </strong>
-                  </span>{" "}
-                  <span>
-                    Category: <strong> {answers.questions[0]?.category}</strong>
-                  </span>
-                  <br />
+                  <h5 style={{ textAlign: "center" }}>
+                    <span>
+                      Difficulty:
+                      <strong> {answers.questions[0]?.difficulty} </strong>
+                    </span>{" "}
+                    <span>
+                      Category:{" "}
+                      <strong> {answers.questions[0]?.category}</strong>
+                    </span>
+                    <br />
+                  </h5>
+
                   <span>
                     <button
                       className={styles.button}
@@ -270,10 +274,12 @@ export default function Reservations() {
                   </span>
                   <br />
                   {/* <span>Correta: {answers.questions[0]?.correctAnswer}</span> */}
-                  <span>
-                    Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
-                    Wrong: {totalWrongQuestions}
-                  </span>
+                  <h5 style={{ textAlign: "center" }}>
+                    <span>
+                      Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
+                      Wrong: {totalWrongQuestions}
+                    </span>
+                  </h5>
                   <br />
                 </div>
               </div>
