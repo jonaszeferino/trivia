@@ -12,9 +12,12 @@ export default function Reservations() {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [totalWrongQuestions, setTotalWrongQuestions] = useState(0);
   const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const apiCall = () => {
-    const url = `https://the-trivia-api.com/api/questions?limit=1&categories=science,history&difficulty=easy`;
+    const url = `https://the-trivia-api.com/api/questions?limit=1&categories=${selectedCategories.join(
+      ","
+    )}&difficulty=easy`;
     setResultsAnswer("");
     setSelectedAnswer("");
     setResultado("");
@@ -54,17 +57,13 @@ export default function Reservations() {
     setShuffledAnswers(newShuffledAnswers);
   }, [answers]);
 
-  // function getResultAnswer() {
-  //   const correctAnswerIndex = shuffledAnswers.indexOf(answers.questions[0]?.correctAnswer
-  //   );
-
   function getResultAnswer(recebido, questao) {
     if (recebido === answers.questions[0]?.correctAnswer) {
-      setResultsAnswer("Você escolheu a resposta correta!");
+      setResultsAnswer("Correct!");
       setTotalCorrectQuestions(totalCorrectQuestions + 1);
     } else {
       setResultsAnswer(
-        `Você escolheu a resposta ${questao}. A resposta correta é ${answers.questions[0]?.correctAnswer}`
+        ` ${questao} Is The Wrong Choise!. The correct answer is: ${answers.questions[0]?.correctAnswer}`
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
     }
@@ -74,6 +73,19 @@ export default function Reservations() {
     setSelectedAnswer(answer);
   }
 
+  const categoryOptions = [
+    { name: "arts_and_literature", displayName: "Arts & Literature" },
+    { name: "film_and_tv", displayName: "Cinema & TV" },
+    { name: "food_and_drink", displayName: "Food & Drink" },
+    { name: "general_knowledge", displayName: "General Knowledge" },
+    { name: "geography", displayName: "Geography" },
+    { name: "history", displayName: "Cinema e TV" },
+    { name: "music", displayName: "History" },
+    { name: "science", displayName: "Science" },
+    { name: "society_and_culture", displayName: "Society & Culture" },
+    { name: "sport_and_leisure", displayName: "Sport & Leisure" },
+  ];
+
   return (
     <div>
       <h1 className={styles.grid}>Trivia</h1>
@@ -81,14 +93,35 @@ export default function Reservations() {
         <br />
         <div>
           <button className={styles.card} onClick={apiCall}>
-            Gerar Questões
+            Start
           </button>
-          <br />
+
+          <div>
+            {categoryOptions.map((category, index) => (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  id={category.name}
+                  name={category.name}
+                  checked={selectedCategories.includes(category.name)}
+                  onChange={(event) => {
+                    const isChecked = event.target.checked;
+                    setSelectedCategories((prevState) =>
+                      isChecked
+                        ? [...prevState, category.name]
+                        : prevState.filter((c) => c !== category.name)
+                    );
+                  }}
+                />
+                <label htmlFor={category.name}>{category.displayName}</label>
+              </div>
+            ))}
+          </div>
         </div>
-        <br />
       </h2>
+
       <div className={styles.grid}>
-        <span> Resultado: {resultsAnswer}</span>
+        <span>{resultsAnswer}</span>
       </div>
 
       <div className={styles.grid}>
@@ -101,6 +134,9 @@ export default function Reservations() {
                 <br />
                 <div>
                   <br />
+                  <button className={styles.card} onClick={apiCall}>
+                    Next Question
+                  </button>
                   <h2>{answers.questions[0]?.question}</h2>
 
                   <span>
