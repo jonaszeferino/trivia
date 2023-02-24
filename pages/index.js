@@ -190,10 +190,14 @@ export default function Reservations() {
                 <br />
                 <div>
                   <br />
-                  <button className={styles.card} onClick={apiCall}>
-                    Next Question
-                  </button>
-                  <h2>{answers.questions[0]?.question}</h2>
+                  <h2>
+                    <button className={styles.card_text} onClick={apiCall}>
+                      Next Question
+                    </button>
+                  </h2>
+                  <h2 className={styles.card_text}>
+                    {answers.questions[0]?.question}
+                  </h2>
                   <span>
                     Difficulty:
                     <strong> {answers.questions[0]?.difficulty} </strong>
@@ -209,7 +213,13 @@ export default function Reservations() {
                     >
                       A
                     </button>{" "}
-                    <span className={styles.card}> {shuffledAnswers[0]}</span>
+                    <button
+                      className={styles.button_text}
+                      onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
+                    >
+                      {shuffledAnswers[0]}
+                    </button>{" "}
+                    {/* <span className={styles.card}> {shuffledAnswers[0]}</span> */}
                   </span>
                   <br />
                   <span>
@@ -219,7 +229,13 @@ export default function Reservations() {
                     >
                       B
                     </button>{" "}
-                    <span className={styles.card}>{shuffledAnswers[1]}</span>
+                    <button
+                      className={styles.button_text}
+                      onClick={() => getResultAnswer(shuffledAnswers[1], "B")}
+                    >
+                      {shuffledAnswers[1]}
+                    </button>{" "}
+                    {/* <span className={styles.card}>{shuffledAnswers[1]}</span> */}
                   </span>
                   <br />
                   <span>
@@ -229,7 +245,13 @@ export default function Reservations() {
                     >
                       C
                     </button>{" "}
-                    <span className={styles.card}>{shuffledAnswers[2]}</span>
+                    <button
+                      className={styles.button_text}
+                      onClick={() => getResultAnswer(shuffledAnswers[2], "C")}
+                    >
+                      {shuffledAnswers[2]}
+                    </button>{" "}
+                    {/* <span className={styles.card}>{shuffledAnswers[2]}</span> */}
                   </span>
                   <br />
                   <span>
@@ -239,7 +261,13 @@ export default function Reservations() {
                     >
                       D
                     </button>{" "}
-                    <span className={styles.card}> {shuffledAnswers[3]} </span>
+                    <button
+                      className={styles.button_text}
+                      onClick={() => getResultAnswer(shuffledAnswers[3], "D")}
+                    >
+                      {shuffledAnswers[3]}
+                    </button>{" "}
+                    {/* <span className={styles.card}> {shuffledAnswers[3]} </span> */}
                   </span>
                   <br />
                   {/* <span>Correta: {answers.questions[0]?.correctAnswer}</span> */}
