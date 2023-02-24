@@ -6,7 +6,9 @@ export default function Reservations() {
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [resultsAnswer, setResultsAnswer] = useState("");
   const [categories, setCategories] = useState("");
-  const [difficulty, setDifficult] = useState("");
+
+  const [selectedDifficulties, setSelectedDifficulties] = useState([]);
+
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [resultado, setResultado] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -14,14 +16,30 @@ export default function Reservations() {
   const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const [showCategoryOptions, setShowCategoryOptions] = useState(true);
+  const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
+
   const apiCall = () => {
+    let choice;
+    if (selectedDifficulties === "easy") {
+      choice = "&difficulty=easy";
+    } else if (selectedDifficulties === "medium") {
+      choice = "&difficulty=medium";
+    } else if (selectedDifficulties === "hard") {
+      choice = "&difficulty=hard";
+    } else {
+      choice = "";
+    }
+
     const url = `https://the-trivia-api.com/api/questions?limit=1&categories=${selectedCategories.join(
       ","
-    )}&difficulty=easy`;
+    )}${choice}`;
     setResultsAnswer("");
     setSelectedAnswer("");
     setResultado("");
     setTotalQuestions(totalQuestions + 1);
+
+    console.log("o que chamou: " + url);
 
     fetch(url)
       .then((response) => {
@@ -38,6 +56,8 @@ export default function Reservations() {
             question: question.question,
             correctAnswer: question.correctAnswer,
             incorrectAnswers: question.incorrectAnswers,
+            difficulty: question.difficulty,
+            category: question.category,
           })),
         });
       })
@@ -79,11 +99,17 @@ export default function Reservations() {
     { name: "food_and_drink", displayName: "Food & Drink" },
     { name: "general_knowledge", displayName: "General Knowledge" },
     { name: "geography", displayName: "Geography" },
-    { name: "history", displayName: "Cinema e TV" },
+    { name: "history", displayName: "Cinema & TV" },
     { name: "music", displayName: "History" },
     { name: "science", displayName: "Science" },
     { name: "society_and_culture", displayName: "Society & Culture" },
     { name: "sport_and_leisure", displayName: "Sport & Leisure" },
+  ];
+
+  const difficultyOptions = [
+    { name: "easy", displayName: "Easy" },
+    { name: "medium", displayName: "Medium" },
+    { name: "hard", displayName: "Hard" },
   ];
 
   return (
@@ -96,34 +122,64 @@ export default function Reservations() {
             Start
           </button>
 
-          <div>
-            {categoryOptions.map((category, index) => (
-              <div key={index}>
-                <input
-                  type="checkbox"
-                  id={category.name}
-                  name={category.name}
-                  checked={selectedCategories.includes(category.name)}
-                  onChange={(event) => {
-                    const isChecked = event.target.checked;
-                    setSelectedCategories((prevState) =>
-                      isChecked
-                        ? [...prevState, category.name]
-                        : prevState.filter((c) => c !== category.name)
-                    );
-                  }}
-                />
-                <label htmlFor={category.name}>{category.displayName}</label>
-              </div>
-            ))}
-          </div>
+          <button onClick={toggleCategoryOptions} className={styles.card}>
+            Options
+          </button>
+          {showCategoryOptions && (
+            <div className="teste">
+              {categoryOptions.map((category, index) => (
+                <div key={index}>
+                  <input
+                    className={styles.test}
+                    type="checkbox"
+                    id={category.name}
+                    name={category.name}
+                    checked={selectedCategories.includes(category.name)}
+                    onChange={(event) => {
+                      const isChecked = event.target.checked;
+                      setSelectedCategories((prevState) =>
+                        isChecked
+                          ? [...prevState, category.name]
+                          : prevState.filter((c) => c !== category.name)
+                      );
+                    }}
+                  />
+                  <label htmlFor={category.name}>{category.displayName}</label>
+                </div>
+              ))}
+              <span>
+                <div>
+                  {difficultyOptions.map((difficulty, index) => (
+                    <div key={index}>
+                      <input
+                        type="checkbox"
+                        id={difficulty.name}
+                        name={difficulty.name}
+                        checked={selectedDifficulties.includes(difficulty.name)}
+                        onChange={(event) => {
+                          const isChecked = event.target.checked;
+                          setSelectedDifficulties((prevState) =>
+                            isChecked
+                              ? [...prevState, difficulty.name]
+                              : prevState.filter((d) => d !== difficulty.name)
+                          );
+                        }}
+                      />
+                      <label htmlFor={difficulty.name}>
+                        {difficulty.displayName}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </span>
+            </div>
+          )}
         </div>
       </h2>
 
       <div className={styles.grid}>
         <span>{resultsAnswer}</span>
       </div>
-
       <div className={styles.grid}>
         <div>
           <br />
@@ -138,7 +194,14 @@ export default function Reservations() {
                     Next Question
                   </button>
                   <h2>{answers.questions[0]?.question}</h2>
-
+                  <span>
+                    Difficulty:
+                    <strong> {answers.questions[0]?.difficulty} </strong>
+                  </span>{" "}
+                  <span>
+                    Category: <strong> {answers.questions[0]?.category}</strong>
+                  </span>
+                  <br />
                   <span>
                     <button
                       className={styles.button}
@@ -179,14 +242,11 @@ export default function Reservations() {
                     <span className={styles.card}> {shuffledAnswers[3]} </span>
                   </span>
                   <br />
-
                   {/* <span>Correta: {answers.questions[0]?.correctAnswer}</span> */}
-
                   <span>
                     Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
                     Wrong: {totalWrongQuestions}
                   </span>
-
                   <br />
                 </div>
               </div>
