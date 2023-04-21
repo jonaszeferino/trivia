@@ -79,11 +79,34 @@ export default function Reservations() {
 
   function getResultAnswer(recebido, questao) {
     if (recebido === answers.questions[0]?.correctAnswer) {
-      setResultsAnswer("Correct!");
+      setResultsAnswer(
+        <span
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            backgroundColor: "green",
+            borderRadius: "7px",
+            padding: "7px",
+          }}
+        >
+          Correct!
+        </span>
+      );
       setTotalCorrectQuestions(totalCorrectQuestions + 1);
     } else {
       setResultsAnswer(
-        ` ${questao} Is The Wrong Choise!. The correct answer is: ${answers.questions[0]?.correctAnswer}`
+        <span
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            backgroundColor: "red",
+            borderRadius: "7px",
+            padding: "7px",
+          }}
+        >
+          {questao}: Is The Wrong Choice!. The correct answer is:{" "}
+          {answers.questions[0]?.correctAnswer}
+        </span>
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
     }
@@ -194,7 +217,10 @@ export default function Reservations() {
                       Next Question
                     </button>
                   </h2>
-                  <h2 className={styles.card_text}>
+                  <h2
+                    className={styles.card_text}
+                    style={{ backgroundColor: "white" }}
+                  >
                     {answers.questions[0]?.question}
                   </h2>
                   <h5 style={{ textAlign: "center" }}>
@@ -222,7 +248,6 @@ export default function Reservations() {
                     >
                       {shuffledAnswers[0]}
                     </button>{" "}
-                    {/* <span className={styles.card}> {shuffledAnswers[0]}</span> */}
                   </span>
                   <br />
                   <span>
@@ -270,10 +295,9 @@ export default function Reservations() {
                     >
                       {shuffledAnswers[3]}
                     </button>{" "}
-                    {/* <span className={styles.card}> {shuffledAnswers[3]} </span> */}
                   </span>
                   <br />
-                  {/* <span>Correta: {answers.questions[0]?.correctAnswer}</span> */}
+
                   <h5 style={{ textAlign: "center" }}>
                     <span>
                       Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
