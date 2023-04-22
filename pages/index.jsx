@@ -137,8 +137,8 @@ export default function Reservations() {
     { name: "food_and_drink", displayName: "Food & Drink" },
     { name: "general_knowledge", displayName: "General Knowledge" },
     { name: "geography", displayName: "Geography" },
-    { name: "history", displayName: "Cinema & TV" },
-    { name: "music", displayName: "History" },
+    { name: "history", displayName: "History" },
+    { name: "music", displayName: "Music" },
     { name: "science", displayName: "Science" },
     { name: "society_and_culture", displayName: "Society & Culture" },
     { name: "sport_and_leisure", displayName: "Sport & Leisure" },
@@ -219,7 +219,7 @@ export default function Reservations() {
       </h2>
 
       <div className={styles.grid}>
-        <span>{resultsAnswer}</span>
+        
       </div>
       <div className={styles.grid}>
         <div>
@@ -345,6 +345,7 @@ export default function Reservations() {
 
 
                   <h5 style={{ textAlign: "center" }}>
+                  <span>{resultsAnswer}</span><br/><br/>
                     <span>
                       Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
                       Wrong: {totalWrongQuestions}
