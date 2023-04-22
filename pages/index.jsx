@@ -16,12 +16,23 @@ export default function Reservations() {
   const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isEnabled,setIsEnabled] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [isClickedA, setIsClickedA] = useState("");
+  const [isClickedB, setIsClickedB] = useState("");
+  const [isClickedC, setIsClickedC] = useState("");
+  const [isClickedD, setIsClickedD] = useState("");
 
   const [showCategoryOptions, setShowCategoryOptions] = useState(true);
+
+
   const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
 
   const apiCall = () => {
     setIsEnabled(false);
+    setIsClickedA("");
+    setIsClickedB("");
+    setIsClickedC("");
+    setIsClickedD("");
     let choice;
     if (selectedDifficulties === "easy") {
       choice = "&difficulty=easy";
@@ -242,14 +253,20 @@ export default function Reservations() {
                   <span>
                     <button
                       className={styles.button}
-                      onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
+                      style={{ backgroundColor: isClickedA }}
+                      onClick={() => {
+                      getResultAnswer(shuffledAnswers[0], "A");
+                      setIsClickedA("#0070f3");}}
                       disabled={isEnabled}
                     >
                       A
                     </button>{" "}
                     <button
                       className={styles.button_text}
-                      onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
+                      style={{ backgroundColor: isClickedA }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[0], "A");
+                        setIsClickedA("#0070f3");}}
                       disabled={isEnabled}
                     >
                       {shuffledAnswers[0]}
@@ -259,14 +276,21 @@ export default function Reservations() {
                   <span>
                     <button
                       className={styles.button}
-                      onClick={() => getResultAnswer(shuffledAnswers[1], "B")}
+                      style={{ backgroundColor: isClickedB }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[1], "B");
+                        setIsClickedB("#0070f3");}}
+                      
                       disabled={isEnabled}
                     >
                       B
                     </button>{" "}
                     <button
                       className={styles.button_text}
-                      onClick={() => getResultAnswer(shuffledAnswers[1], "B")}
+                      style={{ backgroundColor: isClickedB }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[1], "B");
+                        setIsClickedB("#0070f3");}}
                       disabled={isEnabled}
                     >
                       {shuffledAnswers[1]}
@@ -277,14 +301,18 @@ export default function Reservations() {
                   <span>
                     <button
                       className={styles.button}
-                      onClick={() => getResultAnswer(shuffledAnswers[2], "C")}
+                      style={{ backgroundColor: isClickedC }}
+                      onClick={() => {getResultAnswer(shuffledAnswers[2], "C");
+                      setIsClickedC("#0070f3")}}
                       disabled={isEnabled}
                     >
                       C
                     </button>{" "}
                     <button
                       className={styles.button_text}
-                      onClick={() => getResultAnswer(shuffledAnswers[2], "C")}
+                      style={{ backgroundColor: isClickedC }}
+                      onClick={() => {getResultAnswer(shuffledAnswers[2], "C");
+                      setIsClickedC("#0070f3")}}
                       disabled={isEnabled}
                     >
                       {shuffledAnswers[2]}
@@ -295,20 +323,26 @@ export default function Reservations() {
                   <span>
                     <button
                       className={styles.button}
-                      onClick={() => getResultAnswer(shuffledAnswers[3], "D")}
+                      style={{ backgroundColor: isClickedD }}
+                      onClick={() => {getResultAnswer(shuffledAnswers[3], "D");
+                      setIsClickedD("#0070f3")}}
                       disabled={isEnabled}
                     >
                       D
                     </button>{" "}
                     <button
                       className={styles.button_text}
-                      onClick={() => getResultAnswer(shuffledAnswers[3], "D")}
+                      style={{ backgroundColor: isClickedD }}
+                      onClick={() => {getResultAnswer(shuffledAnswers[3], "D");
+                      setIsClickedD("#0070f3")}}
                       disabled={isEnabled}
                     >
                       {shuffledAnswers[3]}
                     </button>{" "}
                   </span>
                   <br />
+
+
 
                   <h5 style={{ textAlign: "center" }}>
                     <span>
