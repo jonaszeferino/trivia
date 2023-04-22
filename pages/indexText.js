@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
+import SignInButton from "../components/SignInButton";
 
 export default function Reservations() {
   const [answers, setAnswers] = useState({ questions: [] });
@@ -14,6 +15,7 @@ export default function Reservations() {
   const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   let [intervalId, setIntervalID] = useState();
+  let [isEnabled, setIsEnabled] = useState();
 
   function startTimer() {
     intervalId = setInterval(() => {
@@ -89,6 +91,10 @@ export default function Reservations() {
   return (
     <div>
       <h1 className={styles.grid}>Trivia</h1>
+      <div>
+        <h1>Login page</h1>
+        <SignInButton />
+      </div>
       <h2 className={styles.grid}>
         <br />
         <div>
@@ -119,6 +125,7 @@ export default function Reservations() {
                     <button
                       className={styles.button}
                       onClick={() => getResultAnswer(shuffledAnswers[0], "A")}
+                      enabled={true}
                     >
                       A
                     </button>{" "}
