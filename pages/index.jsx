@@ -1,5 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from "../styles/Home.module.css";
+import {
+  Button,
+  Checkbox,
+  Stack,
+  Text,
+  VStack,
+  HStack,
+  Box,
+  ChakraProvider,
+  Center,
+} from "@chakra-ui/react";
 
 export default function Reservations() {
   const [answers, setAnswers] = useState({ questions: [] });
@@ -15,7 +26,7 @@ export default function Reservations() {
   const [totalWrongQuestions, setTotalWrongQuestions] = useState(0);
   const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [isEnabled,setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isClickedA, setIsClickedA] = useState("");
   const [isClickedB, setIsClickedB] = useState("");
@@ -23,7 +34,6 @@ export default function Reservations() {
   const [isClickedD, setIsClickedD] = useState("");
 
   const [showCategoryOptions, setShowCategoryOptions] = useState(true);
-
 
   const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
 
@@ -152,212 +162,204 @@ export default function Reservations() {
 
   return (
     <div>
-      <h1 className={styles.grid}>Trivia</h1>
-      <h2 className={styles.grid}>
-        <br />
-        <div>
-          <button className={styles.button} onClick={apiCall}>
-            Start
-          </button>
-
-          <button onClick={toggleCategoryOptions} className={styles.button}>
-            Options
-          </button>
-
-          {showCategoryOptions && (
-            <div className="teste">
-              <span>Areas:</span>
-              {categoryOptions.map((category, index) => (
-                <div key={index}>
-                  <input
-                    className={styles.test}
-                    type="checkbox"
-                    id={category.name}
-                    name={category.name}
-                    checked={selectedCategories.includes(category.name)}
-                    onChange={(event) => {
-                      const isChecked = event.target.checked;
-                      setSelectedCategories((prevState) =>
-                        isChecked
-                          ? [...prevState, category.name]
-                          : prevState.filter((c) => c !== category.name)
-                      );
-                    }}
-                  />
-                  <label htmlFor={category.name}>{category.displayName}</label>
-                </div>
-              ))}
-              <span>
-                <span>Difficulty:</span>
-                <div>
-                  {difficultyOptions.map((difficulty, index) => (
-                    <div key={index}>
-                      <input
-                        type="checkbox"
-                        id={difficulty.name}
-                        name={difficulty.name}
-                        checked={selectedDifficulties.includes(difficulty.name)}
-                        onChange={(event) => {
-                          const isChecked = event.target.checked;
-                          setSelectedDifficulties((prevState) =>
-                            isChecked
-                              ? [...prevState, difficulty.name]
-                              : prevState.filter((d) => d !== difficulty.name)
-                          );
-                        }}
-                      />
-                      <label htmlFor={difficulty.name}>
-                        {difficulty.displayName}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </span>
-            </div>
-          )}
-        </div>
-      </h2>
-
-      <div className={styles.grid}>
-        
-      </div>
-      <div className={styles.grid}>
-        <div>
-          <div>
-            {answers.questions.length > 0 && (
-              <div>
-                <div>
-                  <h2>
-                    <button className={styles.card_text} onClick={apiCall}>
-                      Next Question
-                    </button>
-                  </h2>
-                  <h2
-                    className={styles.card_text}
-                    style={{ backgroundColor: "white" }}
-                  >
-                    {answers.questions[0]?.question}
-                  </h2>
-                  <h5 style={{ textAlign: "center" }}>
-                    <span>
-                      Difficulty:
-                      <strong> {answers.questions[0]?.difficulty} </strong>
-                    </span>{" "}
-                    <span>
-                      Category:{" "}
-                      <strong> {answers.questions[0]?.category}</strong>
-                    </span>
-                    <br />
-                  </h5>
-
-                  <span>
-                    <button
-                      className={styles.button}
-                      style={{ backgroundColor: isClickedA }}
-                      onClick={() => {
-                      getResultAnswer(shuffledAnswers[0], "A");
-                      setIsClickedA("#0070f3");}}
-                      disabled={isEnabled}
-                    >
-                      A
-                    </button>{" "}
-                    <button
-                      className={styles.button_text}
-                      style={{ backgroundColor: isClickedA }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[0], "A");
-                        setIsClickedA("#0070f3");}}
-                      disabled={isEnabled}
-                    >
-                      {shuffledAnswers[0]}
-                    </button>{" "}
-                  </span>
-                  <br />
-                  <span>
-                    <button
-                      className={styles.button}
-                      style={{ backgroundColor: isClickedB }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[1], "B");
-                        setIsClickedB("#0070f3");}}
-                      
-                      disabled={isEnabled}
-                    >
-                      B
-                    </button>{" "}
-                    <button
-                      className={styles.button_text}
-                      style={{ backgroundColor: isClickedB }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[1], "B");
-                        setIsClickedB("#0070f3");}}
-                      disabled={isEnabled}
-                    >
-                      {shuffledAnswers[1]}
-                    </button>{" "}
-                    {/* <span className={styles.card}>{shuffledAnswers[1]}</span> */}
-                  </span>
-                  <br />
-                  <span>
-                    <button
-                      className={styles.button}
-                      style={{ backgroundColor: isClickedC }}
-                      onClick={() => {getResultAnswer(shuffledAnswers[2], "C");
-                      setIsClickedC("#0070f3")}}
-                      disabled={isEnabled}
-                    >
-                      C
-                    </button>{" "}
-                    <button
-                      className={styles.button_text}
-                      style={{ backgroundColor: isClickedC }}
-                      onClick={() => {getResultAnswer(shuffledAnswers[2], "C");
-                      setIsClickedC("#0070f3")}}
-                      disabled={isEnabled}
-                    >
-                      {shuffledAnswers[2]}
-                    </button>{" "}
-                    {/* <span className={styles.card}>{shuffledAnswers[2]}</span> */}
-                  </span>
-                  <br />
-                  <span>
-                    <button
-                      className={styles.button}
-                      style={{ backgroundColor: isClickedD }}
-                      onClick={() => {getResultAnswer(shuffledAnswers[3], "D");
-                      setIsClickedD("#0070f3")}}
-                      disabled={isEnabled}
-                    >
-                      D
-                    </button>{" "}
-                    <button
-                      className={styles.button_text}
-                      style={{ backgroundColor: isClickedD }}
-                      onClick={() => {getResultAnswer(shuffledAnswers[3], "D");
-                      setIsClickedD("#0070f3")}}
-                      disabled={isEnabled}
-                    >
-                      {shuffledAnswers[3]}
-                    </button>{" "}
-                  </span>
-                  <br />
-
-
-
-                  <h5 style={{ textAlign: "center" }}>
-                  <span>{resultsAnswer}</span><br/><br/>
-                    <span>
-                      Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
-                      Wrong: {totalWrongQuestions}
-                    </span>
-                  </h5>
-                  <br />
-                </div>
-              </div>
+      <ChakraProvider>
+        <Center>
+          <HStack spacing={4} align="center">
+            <Button onClick={apiCall}>Start</Button>
+            <Button onClick={toggleCategoryOptions}>Options</Button>
+            {showCategoryOptions && (
+              <VStack spacing={2} align="start">
+                <Text>Areas:</Text>
+                {categoryOptions.map((category, index) => (
+                  <HStack key={index}>
+                    <Checkbox
+                      id={category.name}
+                      name={category.name}
+                      isChecked={selectedCategories.includes(category.name)}
+                      onChange={(event) => {
+                        const isChecked = event.target.checked;
+                        setSelectedCategories((prevState) =>
+                          isChecked
+                            ? [...prevState, category.name]
+                            : prevState.filter((c) => c !== category.name)
+                        );
+                      }}
+                    />
+                    <label htmlFor={category.name}>
+                      {category.displayName}
+                    </label>
+                  </HStack>
+                ))}
+                <HStack>
+                  <Text>Difficulty:</Text>
+                  <VStack spacing={2} align="start">
+                    {difficultyOptions.map((difficulty, index) => (
+                      <HStack key={index}>
+                        <Checkbox
+                          id={difficulty.name}
+                          name={difficulty.name}
+                          isChecked={selectedDifficulties.includes(
+                            difficulty.name
+                          )}
+                          onChange={(event) => {
+                            const isChecked = event.target.checked;
+                            setSelectedDifficulties((prevState) =>
+                              isChecked
+                                ? [...prevState, difficulty.name]
+                                : prevState.filter((d) => d !== difficulty.name)
+                            );
+                          }}
+                        />
+                        <label htmlFor={difficulty.name}>
+                          {difficulty.displayName}
+                        </label>
+                      </HStack>
+                    ))}
+                  </VStack>
+                </HStack>
+              </VStack>
             )}
-          </div>
-        </div>
-      </div>
+          </HStack>
+        </Center>
+      </ChakraProvider>
+      <br/>
+
+      <ChakraProvider>
+        <Stack spacing={4} align="center">
+          {answers.questions.length > 0 && (
+            <Box>
+              <Box>
+                <Center>
+                  <Button onClick={apiCall} colorScheme="blue">
+                    Next Question
+                  </Button>
+                </Center>
+                <br />
+              </Box>
+              <Text>{answers.questions[0]?.question}</Text>
+              <Text textAlign="center">
+                <span>
+                  Difficulty:
+                  <strong> {answers.questions[0]?.difficulty} </strong>
+                </span>{" "}
+                <span>
+                  Category: <strong> {answers.questions[0]?.category}</strong>
+                </span>
+              </Text>
+              <br />
+              <Center>
+                <HStack spacing={2} align="start">
+                  <Button
+                    style={{ backgroundColor: isClickedA }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[0], "A");
+                      setIsClickedA("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    A
+                  </Button>{" "}
+                  <Button
+                    style={{ backgroundColor: isClickedA }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[0], "A");
+                      setIsClickedA("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    {shuffledAnswers[0]}
+                  </Button>{" "}
+                </HStack>
+              </Center>
+              <br />
+              <Center>
+                <HStack spacing={2} align="start">
+                  <Button
+                    style={{ backgroundColor: isClickedB }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[1], "B");
+                      setIsClickedB("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    B
+                  </Button>{" "}
+                  <Button
+                    style={{ backgroundColor: isClickedB }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[1], "B");
+                      setIsClickedB("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    {shuffledAnswers[1]}
+                  </Button>{" "}
+                </HStack>
+              </Center>
+              <br />
+              <Center>
+                <HStack spacing={2} align="start">
+                  <Button
+                    style={{ backgroundColor: isClickedC }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[2], "C");
+                      setIsClickedC("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    C
+                  </Button>{" "}
+                  <Button
+                    style={{ backgroundColor: isClickedC }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[2], "C");
+                      setIsClickedC("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    {shuffledAnswers[2]}
+                  </Button>{" "}
+                </HStack>
+              </Center>
+              <br />
+              <Center>
+                <HStack spacing={2} align="start">
+                  <Button
+                    style={{ backgroundColor: isClickedD }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[3], "D");
+                      setIsClickedD("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    D
+                  </Button>{" "}
+                  <Button
+                    style={{ backgroundColor: isClickedD }}
+                    onClick={() => {
+                      getResultAnswer(shuffledAnswers[3], "D");
+                      setIsClickedD("#0070f3");
+                    }}
+                    disabled={isEnabled}
+                  >
+                    {shuffledAnswers[3]}
+                  </Button>{" "}
+                </HStack>
+              </Center>
+              <br />
+              <Text textAlign="center">
+                <span>{resultsAnswer}</span>
+                <br />
+                <br />
+                <span>
+                  Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
+                  Wrong: {totalWrongQuestions}
+                </span>
+              </Text>
+            </Box>
+          )}
+        </Stack>
+      </ChakraProvider>
     </div>
   );
 }
