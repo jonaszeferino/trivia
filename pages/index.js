@@ -167,8 +167,9 @@ export default function Reservations() {
           <HStack spacing={4} align="center">
             <Button onClick={apiCall}>Start</Button>
             <Button onClick={toggleCategoryOptions}>Options</Button>
+            <br />
             {showCategoryOptions && (
-              <VStack spacing={2} align="start">
+              <HStack spacing={2} align="start">
                 <Text>Areas:</Text>
                 {categoryOptions.map((category, index) => (
                   <HStack key={index}>
@@ -217,25 +218,25 @@ export default function Reservations() {
                     ))}
                   </VStack>
                 </HStack>
-              </VStack>
+              </HStack>
             )}
           </HStack>
         </Center>
       </ChakraProvider>
-      <br/>
+      <br />
 
       <ChakraProvider>
+        <Box>
+          <Center>
+            <Button onClick={apiCall} colorScheme="blue">
+              Next Question
+            </Button>
+          </Center>
+          <br />
+        </Box>
         <Stack spacing={4} align="center">
           {answers.questions.length > 0 && (
             <Box>
-              <Box>
-                <Center>
-                  <Button onClick={apiCall} colorScheme="blue">
-                    Next Question
-                  </Button>
-                </Center>
-                <br />
-              </Box>
               <Text>{answers.questions[0]?.question}</Text>
               <Text textAlign="center">
                 <span>
@@ -248,103 +249,96 @@ export default function Reservations() {
               </Text>
               <br />
               <Center>
-                <HStack spacing={2} align="start">
-                  <Button
-                    style={{ backgroundColor: isClickedA }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[0], "A");
-                      setIsClickedA("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    A
-                  </Button>{" "}
-                  <Button
-                    style={{ backgroundColor: isClickedA }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[0], "A");
-                      setIsClickedA("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    {shuffledAnswers[0]}
-                  </Button>{" "}
-                </HStack>
-              </Center>
-              <br />
-              <Center>
-                <HStack spacing={2} align="start">
-                  <Button
-                    style={{ backgroundColor: isClickedB }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[1], "B");
-                      setIsClickedB("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    B
-                  </Button>{" "}
-                  <Button
-                    style={{ backgroundColor: isClickedB }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[1], "B");
-                      setIsClickedB("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    {shuffledAnswers[1]}
-                  </Button>{" "}
-                </HStack>
-              </Center>
-              <br />
-              <Center>
-                <HStack spacing={2} align="start">
-                  <Button
-                    style={{ backgroundColor: isClickedC }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[2], "C");
-                      setIsClickedC("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    C
-                  </Button>{" "}
-                  <Button
-                    style={{ backgroundColor: isClickedC }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[2], "C");
-                      setIsClickedC("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    {shuffledAnswers[2]}
-                  </Button>{" "}
-                </HStack>
-              </Center>
-              <br />
-              <Center>
-                <HStack spacing={2} align="start">
-                  <Button
-                    style={{ backgroundColor: isClickedD }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[3], "D");
-                      setIsClickedD("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    D
-                  </Button>{" "}
-                  <Button
-                    style={{ backgroundColor: isClickedD }}
-                    onClick={() => {
-                      getResultAnswer(shuffledAnswers[3], "D");
-                      setIsClickedD("#0070f3");
-                    }}
-                    disabled={isEnabled}
-                  >
-                    {shuffledAnswers[3]}
-                  </Button>{" "}
-                </HStack>
+                <VStack spacing={2} align="start">
+                  <HStack spacing={2} align="start">
+                    <Button
+                      style={{ backgroundColor: isClickedA }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[0], "A");
+                        setIsClickedA("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      A
+                    </Button>{" "}
+                    <Button
+                      style={{ backgroundColor: isClickedA }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[0], "A");
+                        setIsClickedA("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      {shuffledAnswers[0]}
+                    </Button>{" "}
+                  </HStack>
+                  <HStack spacing={2} align="start">
+                    <Button
+                      style={{ backgroundColor: isClickedB }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[1], "B");
+                        setIsClickedB("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      B
+                    </Button>{" "}
+                    <Button
+                      style={{ backgroundColor: isClickedB }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[1], "B");
+                        setIsClickedB("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      {shuffledAnswers[1]}
+                    </Button>{" "}
+                  </HStack>
+                  <HStack spacing={2} align="start">
+                    <Button
+                      style={{ backgroundColor: isClickedC }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[2], "C");
+                        setIsClickedC("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      C
+                    </Button>{" "}
+                    <Button
+                      style={{ backgroundColor: isClickedC }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[2], "C");
+                        setIsClickedC("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      {shuffledAnswers[2]}
+                    </Button>{" "}
+                  </HStack>
+                  <HStack spacing={2} align="start">
+                    <Button
+                      style={{ backgroundColor: isClickedD }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[3], "D");
+                        setIsClickedD("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      D
+                    </Button>{" "}
+                    <Button
+                      style={{ backgroundColor: isClickedD }}
+                      onClick={() => {
+                        getResultAnswer(shuffledAnswers[3], "D");
+                        setIsClickedD("#0070f3");
+                      }}
+                      disabled={isEnabled}
+                    >
+                      {shuffledAnswers[3]}
+                    </Button>{" "}
+                  </HStack>
+                </VStack>
               </Center>
               <br />
               <Text textAlign="center">
