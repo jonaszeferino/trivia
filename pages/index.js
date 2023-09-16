@@ -33,6 +33,8 @@ export default function Reservations() {
   const [isClickedC, setIsClickedC] = useState("");
   const [isClickedD, setIsClickedD] = useState("");
 
+  const [firstTime, setFirstTime] = useState(true);
+
   const [showCategoryOptions, setShowCategoryOptions] = useState(true);
 
   const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
@@ -168,88 +170,114 @@ export default function Reservations() {
       <ChakraProvider>
         <Center>
           <HStack spacing={4} align="center">
-            <Button onClick={apiCall}>Start</Button>
             <Button onClick={toggleCategoryOptions}>Options</Button>
           </HStack>
         </Center>
         <Center>
           {showCategoryOptions && (
             <VStack align="start" spacing={4}>
-              <Box>
-                <Text>Areas:</Text>
-                {categoryOptions.map((category, index) => (
-                  <HStack key={index}>
-                    <Checkbox
-                      id={category.name}
-                      name={category.name}
-                      isChecked={selectedCategories.includes(category.name)}
-                      onChange={(event) => {
-                        const isChecked = event.target.checked;
-                        setSelectedCategories((prevState) =>
-                          isChecked
-                            ? [...prevState, category.name]
-                            : prevState.filter((c) => c !== category.name)
-                        );
-                      }}
-                    />
-                    <label htmlFor={category.name}>
-                      {category.displayName}
-                    </label>
-                  </HStack>
-                ))}
-              </Box>
-              <Box>
-                <Text>Difficulty:</Text>
-
-                <HStack spacing={2}>
-                  {difficultyOptions.map((difficulty, index) => (
+              <Center>
+                <Box>
+                  <Text>Areas:</Text>
+                  {categoryOptions.map((category, index) => (
                     <HStack key={index}>
                       <Checkbox
-                        id={difficulty.name}
-                        name={difficulty.name}
-                        isChecked={selectedDifficulties.includes(
-                          difficulty.name
-                        )}
+                        id={category.name}
+                        name={category.name}
+                        isChecked={selectedCategories.includes(category.name)}
                         onChange={(event) => {
                           const isChecked = event.target.checked;
-                          if (isChecked) {
-                            // Se um novo é marcado, desmarque todos os outros
-                            setSelectedDifficulties([difficulty.name]);
-                          } else {
-                            // Se for desmarcado, remova-o da lista
-                            setSelectedDifficulties((prevState) =>
-                              prevState.filter((d) => d !== difficulty.name)
-                            );
-                          }
+                          setSelectedCategories((prevState) =>
+                            isChecked
+                              ? [...prevState, category.name]
+                              : prevState.filter((c) => c !== category.name)
+                          );
                         }}
                       />
-                      <label htmlFor={difficulty.name}>
-                        {difficulty.displayName}
+                      <label htmlFor={category.name}>
+                        {category.displayName}
                       </label>
                     </HStack>
                   ))}
-                </HStack>
-              </Box>
+                </Box>
+              </Center>
+              <Center>
+                <Box>
+                  <Text>Difficulty:</Text>
+
+                  <HStack spacing={2}>
+                    {difficultyOptions.map((difficulty, index) => (
+                      <HStack key={index}>
+                        <Checkbox
+                          id={difficulty.name}
+                          name={difficulty.name}
+                          isChecked={selectedDifficulties.includes(
+                            difficulty.name
+                          )}
+                          onChange={(event) => {
+                            const isChecked = event.target.checked;
+                            if (isChecked) {
+                              // Se um novo é marcado, desmarque todos os outros
+                              setSelectedDifficulties([difficulty.name]);
+                            } else {
+                              // Se for desmarcado, remova-o da lista
+                              setSelectedDifficulties((prevState) =>
+                                prevState.filter((d) => d !== difficulty.name)
+                              );
+                            }
+                          }}
+                        />
+                        <label htmlFor={difficulty.name}>
+                          {difficulty.displayName}
+                        </label>
+                      </HStack>
+                    ))}
+                  </HStack>
+                </Box>
+              </Center>
             </VStack>
           )}
         </Center>
       </ChakraProvider>
+      <Center>
+        <Text style={{ margin: "10px" }}>
+          Without any selection, the questions will come randomly with all
+          subjects and difficulties
+        </Text>
+      </Center>
 
       <br />
 
       <ChakraProvider>
         <Box>
           <Center>
-            <Button onClick={apiCall} colorScheme="blue">
-              Next Question
+            <Button
+              onClick={() => {
+                apiCall();
+                setFirstTime(false);
+                setTotalQuestions(0);
+                setTotalCorrectQuestions(0);
+                setTotalWrongQuestions(0);
+              }}
+            >
+              Start
             </Button>
+          </Center>
+          <Center>
+            {!firstTime && (
+              <Button onClick={apiCall} colorScheme="blue" disabled={true}>
+                Next Question
+              </Button>
+            )}
           </Center>
           <br />
         </Box>
         <Stack spacing={4} align="center">
           {answers.questions.length > 0 && (
             <Box>
-              <Text>{answers.questions[0]?.question}</Text>
+              <Text style={{ margin: "10px" }}>
+                {answers.questions[0]?.question}
+              </Text>
 
               <br />
               <Center>
