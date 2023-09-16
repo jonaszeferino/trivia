@@ -238,15 +238,7 @@ export default function Reservations() {
           {answers.questions.length > 0 && (
             <Box>
               <Text>{answers.questions[0]?.question}</Text>
-              <Text textAlign="center">
-                <span>
-                  Difficulty:
-                  <strong> {answers.questions[0]?.difficulty} </strong>
-                </span>{" "}
-                <span>
-                  Category: <strong> {answers.questions[0]?.category}</strong>
-                </span>
-              </Text>
+          
               <br />
               <Center>
                 <VStack spacing={2} align="start">
@@ -345,6 +337,15 @@ export default function Reservations() {
                 <span>{resultsAnswer}</span>
                 <br />
                 <br />
+                <Text textAlign="center">
+                <span>
+                  Difficulty:
+                  <strong> {answers.questions[0]?.difficulty} </strong>
+                </span>{" "}
+                <span>
+                  Category: <strong> {answers.questions[0]?.category}</strong>
+                </span>
+              </Text>
                 <span>
                   Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
                   Wrong: {totalWrongQuestions}
