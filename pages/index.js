@@ -43,16 +43,19 @@ export default function Reservations() {
     setIsClickedB("");
     setIsClickedC("");
     setIsClickedD("");
-    let choice;
-    if (selectedDifficulties === "easy") {
+
+    let choice = "";
+
+    if (selectedDifficulties.includes("easy")) {
       choice = "&difficulty=easy";
-    } else if (selectedDifficulties === "medium") {
+    } else if (selectedDifficulties.includes("medium")) {
       choice = "&difficulty=medium";
-    } else if (selectedDifficulties === "hard") {
+    } else if (selectedDifficulties.includes("hard")) {
       choice = "&difficulty=hard";
-    } else {
-      choice = "";
     }
+
+    console.log(selectedDifficulties);
+    console.log(choice);
 
     const url = `https://the-trivia-api.com/api/questions?limit=1&categories=${selectedCategories.join(
       ","
@@ -167,9 +170,12 @@ export default function Reservations() {
           <HStack spacing={4} align="center">
             <Button onClick={apiCall}>Start</Button>
             <Button onClick={toggleCategoryOptions}>Options</Button>
-            <br />
-            {showCategoryOptions && (
-              <HStack spacing={2} align="start">
+          </HStack>
+        </Center>
+        <Center>
+          {showCategoryOptions && (
+            <VStack align="start" spacing={4}>
+              <Box>
                 <Text>Areas:</Text>
                 {categoryOptions.map((category, index) => (
                   <HStack key={index}>
@@ -191,38 +197,44 @@ export default function Reservations() {
                     </label>
                   </HStack>
                 ))}
-                <HStack>
-                  <Text>Difficulty:</Text>
-                  <VStack spacing={2} align="start">
-                    {difficultyOptions.map((difficulty, index) => (
-                      <HStack key={index}>
-                        <Checkbox
-                          id={difficulty.name}
-                          name={difficulty.name}
-                          isChecked={selectedDifficulties.includes(
-                            difficulty.name
-                          )}
-                          onChange={(event) => {
-                            const isChecked = event.target.checked;
+              </Box>
+              <Box>
+                <Text>Difficulty:</Text>
+
+                <HStack spacing={2}>
+                  {difficultyOptions.map((difficulty, index) => (
+                    <HStack key={index}>
+                      <Checkbox
+                        id={difficulty.name}
+                        name={difficulty.name}
+                        isChecked={selectedDifficulties.includes(
+                          difficulty.name
+                        )}
+                        onChange={(event) => {
+                          const isChecked = event.target.checked;
+                          if (isChecked) {
+                            // Se um novo é marcado, desmarque todos os outros
+                            setSelectedDifficulties([difficulty.name]);
+                          } else {
+                            // Se for desmarcado, remova-o da lista
                             setSelectedDifficulties((prevState) =>
-                              isChecked
-                                ? [...prevState, difficulty.name]
-                                : prevState.filter((d) => d !== difficulty.name)
+                              prevState.filter((d) => d !== difficulty.name)
                             );
-                          }}
-                        />
-                        <label htmlFor={difficulty.name}>
-                          {difficulty.displayName}
-                        </label>
-                      </HStack>
-                    ))}
-                  </VStack>
+                          }
+                        }}
+                      />
+                      <label htmlFor={difficulty.name}>
+                        {difficulty.displayName}
+                      </label>
+                    </HStack>
+                  ))}
                 </HStack>
-              </HStack>
-            )}
-          </HStack>
+              </Box>
+            </VStack>
+          )}
         </Center>
       </ChakraProvider>
+
       <br />
 
       <ChakraProvider>
@@ -238,7 +250,7 @@ export default function Reservations() {
           {answers.questions.length > 0 && (
             <Box>
               <Text>{answers.questions[0]?.question}</Text>
-          
+
               <br />
               <Center>
                 <VStack spacing={2} align="start">
@@ -338,14 +350,14 @@ export default function Reservations() {
                 <br />
                 <br />
                 <Text textAlign="center">
-                <span>
-                  Difficulty:
-                  <strong> {answers.questions[0]?.difficulty} </strong>
-                </span>{" "}
-                <span>
-                  Category: <strong> {answers.questions[0]?.category}</strong>
-                </span>
-              </Text>
+                  <span>
+                    Difficulty:
+                    <strong> {answers.questions[0]?.difficulty} </strong>
+                  </span>{" "}
+                  <span>
+                    Category: <strong> {answers.questions[0]?.category}</strong>
+                  </span>
+                </Text>
                 <span>
                   Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
                   Wrong: {totalWrongQuestions}
