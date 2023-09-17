@@ -11,6 +11,7 @@ import {
   ChakraProvider,
   Center,
 } from "@chakra-ui/react";
+import { Alert, Space } from "antd";
 
 export default function Reservations() {
   const [answers, setAnswers] = useState({ questions: [] });
@@ -26,7 +27,7 @@ export default function Reservations() {
   const [totalWrongQuestions, setTotalWrongQuestions] = useState(0);
   const [totalCorrectQuestions, setTotalCorrectQuestions] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isDisabled, setisDisabled] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isClickedA, setIsClickedA] = useState("");
   const [isClickedB, setIsClickedB] = useState("");
@@ -36,11 +37,13 @@ export default function Reservations() {
   const [firstTime, setFirstTime] = useState(true);
 
   const [showCategoryOptions, setShowCategoryOptions] = useState(true);
+  const [hasAnswered, setHasAnswered] = useState(false);
 
   const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
 
+  console.log(isDisabled);
+
   const apiCall = () => {
-    setIsEnabled(false);
     setIsClickedA("");
     setIsClickedB("");
     setIsClickedC("");
@@ -106,8 +109,8 @@ export default function Reservations() {
   }, [answers]);
 
   function getResultAnswer(recebido, questao) {
+    setisDisabled(true);
     if (recebido === answers.questions[0]?.correctAnswer) {
-      setIsEnabled(true);
       setResultsAnswer(
         <span
           style={{
@@ -123,7 +126,6 @@ export default function Reservations() {
       );
       setTotalCorrectQuestions(totalCorrectQuestions + 1);
     } else {
-      setIsEnabled(true);
       setResultsAnswer(
         <span
           style={{
@@ -140,10 +142,6 @@ export default function Reservations() {
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
     }
-  }
-
-  function handleSelectAnswer(answer) {
-    setSelectedAnswer(answer);
   }
 
   const categoryOptions = [
@@ -164,6 +162,8 @@ export default function Reservations() {
     { name: "medium", displayName: "Medium" },
     { name: "hard", displayName: "Hard" },
   ];
+
+
 
   return (
     <div>
@@ -240,10 +240,22 @@ export default function Reservations() {
         </Center>
       </ChakraProvider>
       <Center>
-        <Text style={{ margin: "10px" }}>
-          Without any selection, the questions will come randomly with all
-          subjects and difficulties
-        </Text>
+        <Space
+          direction="vertical"
+          style={{
+            magin: "10px",
+          }}
+        >
+          <Alert
+            message="Without any selection, the questions will come randomly with all
+            subjects and difficulties"
+            type="success"
+            showIcon
+            closable
+          />
+        </Space>
+
+        <Text style={{ margin: "10px" }}></Text>
       </Center>
 
       <br />
@@ -258,6 +270,7 @@ export default function Reservations() {
                 setTotalQuestions(0);
                 setTotalCorrectQuestions(0);
                 setTotalWrongQuestions(0);
+                setisDisabled(false);
               }}
             >
               Start
@@ -265,7 +278,12 @@ export default function Reservations() {
           </Center>
           <Center>
             {!firstTime && (
-              <Button onClick={apiCall} colorScheme="blue" disabled={true}>
+              <Button
+                onClick={() => {
+                  apiCall(), setisDisabled(false);
+                }}
+                colorScheme="blue"
+              >
                 Next Question
               </Button>
             )}
@@ -288,8 +306,9 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[0], "A");
                         setIsClickedA("#0070f3");
+                        
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       A
                     </Button>{" "}
@@ -299,7 +318,7 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[0], "A");
                         setIsClickedA("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       {shuffledAnswers[0]}
                     </Button>{" "}
@@ -311,7 +330,7 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[1], "B");
                         setIsClickedB("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       B
                     </Button>{" "}
@@ -321,7 +340,8 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[1], "B");
                         setIsClickedB("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
+
                     >
                       {shuffledAnswers[1]}
                     </Button>{" "}
@@ -333,7 +353,7 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[2], "C");
                         setIsClickedC("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       C
                     </Button>{" "}
@@ -343,7 +363,7 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[2], "C");
                         setIsClickedC("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       {shuffledAnswers[2]}
                     </Button>{" "}
@@ -355,7 +375,7 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[3], "D");
                         setIsClickedD("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       D
                     </Button>{" "}
@@ -365,7 +385,7 @@ export default function Reservations() {
                         getResultAnswer(shuffledAnswers[3], "D");
                         setIsClickedD("#0070f3");
                       }}
-                      disabled={isEnabled}
+                      isDisabled={isDisabled}
                     >
                       {shuffledAnswers[3]}
                     </Button>{" "}
