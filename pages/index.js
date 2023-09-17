@@ -273,9 +273,14 @@ export default function Reservations() {
             >
               Start
             </Button>
+            <br/>
+            <br/>
+            <br/>
           </Center>
           <Center>
+            <br/>
             {!firstTime && (
+              
               <Button
                 onClick={() => {
                   apiCall(), setisDisabled(false);
