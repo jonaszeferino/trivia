@@ -14,5 +14,8 @@
 ## Host
 - Vercel (connected to GitHub)
 
+## API
+https://the-trivia-api.com
+
 
 
