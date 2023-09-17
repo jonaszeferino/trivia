@@ -163,8 +163,6 @@ export default function Reservations() {
     { name: "hard", displayName: "Hard" },
   ];
 
-
-
   return (
     <div>
       <ChakraProvider>
@@ -306,7 +304,6 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[0], "A");
                         setIsClickedA("#0070f3");
-                        
                       }}
                       isDisabled={isDisabled}
                     >
@@ -341,7 +338,6 @@ export default function Reservations() {
                         setIsClickedB("#0070f3");
                       }}
                       isDisabled={isDisabled}
-
                     >
                       {shuffledAnswers[1]}
                     </Button>{" "}
@@ -406,10 +402,23 @@ export default function Reservations() {
                     Category: <strong> {answers.questions[0]?.category}</strong>
                   </span>
                 </Text>
-                <span>
-                  Total: {totalQuestions} Corrects: {totalCorrectQuestions}{" "}
-                  Wrong: {totalWrongQuestions}
-                </span>
+
+                <VStack spacing={2} align="center">
+                  <Text>
+                    <strong>Total:</strong>{" "}
+                    <Text as="span" color="black">
+                      <strong>{totalQuestions}</strong>
+                    </Text>{" "}
+                    <strong>Corrects:</strong>{" "}
+                    <Text as="span" color="green">
+                      <strong>{totalCorrectQuestions} </strong>
+                    </Text>{" "}
+                    <strong>Wrong:</strong>{" "}
+                    <Text as="span" color="red">
+                      <strong> {totalWrongQuestions}</strong>
+                    </Text>
+                  </Text>
+                </VStack>
               </Text>
             </Box>
           )}

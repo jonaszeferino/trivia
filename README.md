@@ -2,7 +2,6 @@
 ## Trivia
 
 - Next.js 13.01 without TypeScript
-
 - Trivia game using external API
 
 ## Design
