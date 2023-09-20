@@ -160,17 +160,32 @@ export default function Reservations() {
                       ))}
                     </Tbody>
                   </Table>
-                  <Text>Total de Questões: {totalCount}</Text>
-                  <Text>Total de Corretas: {totalCorrect_1}</Text>
-                  <Text>Total de Erradas: {totalCorrect_0}</Text>
-                  <Text>
-                    Percentual Errada:{" "}
-                    {((100 * totalCorrect_0) / totalCount).toFixed(2)}%
-                  </Text>
-                  <Text>
-                    Percentual Certa:{" "}
-                    {((100 * totalCorrect_1) / totalCount).toFixed(2)}%
-                  </Text>
+
+                  <Table variant="striped" colorScheme="blue">
+                    <TableCaption>Totais</TableCaption>
+                    <Thead>
+                      <Tr>
+                        <Th>Total de Questões:</Th>
+                        <Th>Total de Corretas:</Th>
+                        <Th>Total de Erradas:</Th>
+                        <Th>Percentual de Erradas:</Th>
+                        <Th>Percentual de Certas:</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>{totalCount}</Td>
+                        <Td>{totalCorrect_1}</Td>
+                        <Td>{totalCorrect_0}</Td>
+                        <Td>
+                          {((100 * totalCorrect_0) / totalCount).toFixed(2)}%
+                        </Td>
+                        <Td>
+                          {((100 * totalCorrect_1) / totalCount).toFixed(2)}%
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
                 </ChakraProvider>
               </div>
             )}
