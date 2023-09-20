@@ -12,6 +12,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { Alert, Space } from "antd";
+import { supabase } from "../utils/supabaseClient";
 
 export default function Reservations() {
   const [answers, setAnswers] = useState({ questions: [] });
@@ -39,9 +40,11 @@ export default function Reservations() {
   const [showCategoryOptions, setShowCategoryOptions] = useState(true);
   const [hasAnswered, setHasAnswered] = useState(false);
 
-  const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
+  const [session, setSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [correct, setCorrect] = useState(0);
 
-  console.log(isDisabled);
+  const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
 
   const apiCall = () => {
     setIsClickedA("");
@@ -125,6 +128,7 @@ export default function Reservations() {
         </span>
       );
       setTotalCorrectQuestions(totalCorrectQuestions + 1);
+      setCorrect(1)
     } else {
       setResultsAnswer(
         <span
@@ -139,8 +143,10 @@ export default function Reservations() {
           {questao}: Is The Wrong Choice!. The correct answer is:{" "}
           {answers.questions[0]?.correctAnswer}
         </span>
+        
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
+      setCorrect(0)
     }
   }
 
@@ -163,9 +169,80 @@ export default function Reservations() {
     { name: "hard", displayName: "Hard" },
   ];
 
+
+
+  // verificar as sessões
+  useEffect(() => {
+    let mounted = true;
+    async function getInitialSession() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (mounted) {
+        if (session) {
+          setSession(session);
+        }
+        setIsLoading(false);
+      }
+    }
+    getInitialSession();
+    const { subscription } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+    return () => {
+      mounted = false;
+      subscription?.unsubscribe();
+    };
+  }, []);
+
+  //Enviar stats
+
+  const insertStats = async () => {
+    try {
+      const response = await fetch("/api/v1/postStatsTrivia", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_email: session.user.email || "not logged in",
+          questionId: answers.questions[0].id, 
+          correct: correct,
+          difficulty: answers.questions[0].difficulty, 
+        }),
+      });
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log(correct)
+
   return (
     <div>
       <ChakraProvider>
+        <ChakraProvider>
+          {session ? (
+            <p>
+              <Center>
+                {session.user.email} <br />
+                <Center>
+                  <Button
+                    onClick={() => supabase.auth.signOut()}
+                    colorScheme="red"
+                    size="sm"
+                  >
+                    Sair
+                  </Button>
+                </Center>
+              </Center>
+            </p>
+          ) : null}
+        </ChakraProvider>
+
         <Center>
           <HStack spacing={4} align="center">
             <Button onClick={toggleCategoryOptions}>Options</Button>
@@ -273,14 +350,13 @@ export default function Reservations() {
             >
               Start
             </Button>
-            <br/>
-            <br/>
-            <br/>
+            <br />
+            <br />
+            <br />
           </Center>
           <Center>
-            <br/>
+            <br />
             {!firstTime && (
-              
               <Button
                 onClick={() => {
                   apiCall(), setisDisabled(false);
@@ -309,6 +385,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[0], "A");
                         setIsClickedA("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -319,6 +396,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[0], "A");
                         setIsClickedA("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -331,6 +409,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[1], "B");
                         setIsClickedB("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -341,6 +420,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[1], "B");
                         setIsClickedB("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -353,6 +433,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[2], "C");
                         setIsClickedC("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -363,6 +444,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[2], "C");
                         setIsClickedC("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -375,6 +457,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[3], "D");
                         setIsClickedD("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >
@@ -385,6 +468,7 @@ export default function Reservations() {
                       onClick={() => {
                         getResultAnswer(shuffledAnswers[3], "D");
                         setIsClickedD("#0070f3");
+                        insertStats();
                       }}
                       isDisabled={isDisabled}
                     >

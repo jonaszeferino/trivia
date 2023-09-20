@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { Alert, Space } from "antd";
 
-export default function Reservations() {
+export default function Options() {
   return (
     <div>
       <ChakraProvider>
