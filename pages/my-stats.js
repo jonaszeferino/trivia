@@ -67,9 +67,6 @@ export default function Reservations() {
     totalCorrect_1 += parseInt(totals.correct_1_count);
   });
 
-  console.log(totalCount);
-  console.log(data.correct_0_count);
-
   useEffect(() => {
     let mounted = true;
     async function getInitialSession() {
@@ -141,8 +138,8 @@ export default function Reservations() {
                     <Thead>
                       <Tr>
                         <Th>Dificuldade</Th>
-                        <Th>Corretas</Th>
                         <Th>Erradas</Th>
+                        <Th>Corretas</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
