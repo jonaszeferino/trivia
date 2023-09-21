@@ -10,6 +10,7 @@ import {
   Box,
   ChakraProvider,
   Center,
+  Link,
 } from "@chakra-ui/react";
 import { Alert, Space } from "antd";
 import { supabase } from "../utils/supabaseClient";
@@ -237,9 +238,25 @@ export default function Reservations() {
                 </Center>
               </Center>
             </p>
-          ) : null}
+          ) : (
+            <ChakraProvider>
+              <Center>
+                <Center>
+                  <Text>
+                    <Link href="/signUp">
+                      <Button>Login</Button>
+                    </Link>
+                  </Text>
+                </Center>
+                <Text>
+                  <strong>Você Não Está Logado</strong>
+                </Text>
+              </Center>
+            </ChakraProvider>
+          )}
         </ChakraProvider>
 
+        <br />
         <Center>
           <HStack spacing={4} align="center">
             <Button onClick={toggleCategoryOptions}>Options</Button>
