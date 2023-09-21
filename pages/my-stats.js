@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import styles from "../styles/Home.module.css";
 import {
   Button,
@@ -21,6 +21,13 @@ import {
   CircularProgress,
   AlertIcon,
   Alert,
+  AlertDialog,
+  useDisclosure,
+  AlertDialogOverlay,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
 } from "@chakra-ui/react";
 
 import { supabase } from "../utils/supabaseClient";
@@ -30,6 +37,9 @@ export default function Reservations() {
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  //   const cancelRef = React.useRef();
+  const cancelRef = useRef();
 
   const getStatsTrivia = async () => {
     setIsError(false);
@@ -61,6 +71,29 @@ export default function Reservations() {
         }
       }
       setIsLoading(false);
+    } catch (error) {
+      setIsError(true);
+      console.error("Erro inesperado:", error);
+    }
+  };
+
+  const deleteStatsTrivia = async () => {
+    setIsError(false);
+    setData([])
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(`/api/v1/deleteStatsTrivia`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_email: session.user.email,
+        }),
+      });
+      setIsLoading(false);
+      getStatsTrivia()
     } catch (error) {
       setIsError(true);
       console.error("Erro inesperado:", error);
@@ -228,6 +261,45 @@ export default function Reservations() {
               </div>
             )}
           </Center>
+          {data.length > 0 && (
+            <>
+              <Center>
+                <Button colorScheme="red" onClick={onOpen}>
+                  Deletar estatisticas
+                </Button>
+
+                <AlertDialog isOpen={isOpen} onClose={onClose}>
+                  <AlertDialogOverlay>
+                    <AlertDialogContent>
+                      <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                        Delete Estatisticas
+                      </AlertDialogHeader>
+
+                      <AlertDialogBody>
+                        Essa ação não pode ser desfeita.Tem Certeza?
+                      </AlertDialogBody>
+
+                      <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={onClose}>
+                          Cancel
+                        </Button>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => {
+                            deleteStatsTrivia();
+                            onClose();
+                          }}
+                          ml={3}
+                        >
+                          Delete
+                        </Button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialogOverlay>
+                </AlertDialog>
+              </Center>
+            </>
+          )}
         </ChakraProvider>
       ) : (
         <ChakraProvider>
