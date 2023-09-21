@@ -18,6 +18,9 @@ import {
   Td,
   TableCaption,
   Link,
+  CircularProgress,
+  AlertIcon,
+  Alert,
 } from "@chakra-ui/react";
 
 import { supabase } from "../utils/supabaseClient";
@@ -26,12 +29,13 @@ export default function Reservations() {
   const [data, setData] = useState([]);
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log(data);
+  const [isError, setIsError] = useState(false);
 
   const getStatsTrivia = async () => {
-    console.log("Chamou");
+    setIsError(false);
+
     try {
+      setIsLoading(true);
       const response = await fetch(`/api/v1/getStatsTrivia`, {
         method: "POST",
         headers: {
@@ -43,16 +47,23 @@ export default function Reservations() {
       });
       if (response.ok) {
         const data = await response.json();
-        setData(data);
-        console.log("Cegou aqui 1");
+        if (data.message && data.message === "Nenhum resultado encontrado") {
+          console.log("Nenhum resultado encontrado");
+          console.log(data.message);
+        } else {
+          setData(data);
+        }
       } else {
-        console.error("Erro ao buscar os dados:", response.status);
-        console.log("Cegou aqui 2");
+        console.log(response.status);
+        if (response.status === 404) {
+          setIsError(true);
+          console.log(isError);
+        }
       }
+      setIsLoading(false);
     } catch (error) {
+      setIsError(true);
       console.error("Erro inesperado:", error);
-      console.log("Cegou aqui 3");
-      console.log(error);
     }
   };
 
@@ -114,6 +125,7 @@ export default function Reservations() {
         ) : null}
       </ChakraProvider>
       <br />
+
       {session ? (
         <ChakraProvider>
           <Center>
@@ -123,7 +135,33 @@ export default function Reservations() {
           </Center>
 
           <Center>
-            {data && (
+            <ChakraProvider />
+
+            {isLoading && (
+              <CircularProgress isIndeterminate color="green.300" />
+            )}
+
+            <div
+              style={{
+                maxWidth: "800px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {isError && (
+                <div style={{ margin: "20px 0" }}>
+                  <Alert status="warning">
+                    <AlertIcon />
+                    Sem Estatisticas
+                  </Alert>
+                </div>
+              )}
+            </div>
+          </Center>
+
+          <Center>
+            {data.length > 0 && (
               <div
                 style={{
                   maxWidth: "700px",

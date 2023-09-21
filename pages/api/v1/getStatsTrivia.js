@@ -11,8 +11,6 @@ export default async function handler(req, res) {
   try {
     const user_email = req.body.user_email;
 
-    console.log(req.body.user_email)
-
     if (typeof user_email !== "string" || user_email.trim() === "") {
       res.status(400).json({ error: "user_email must be a non-empty string" });
       return;
@@ -36,7 +34,13 @@ export default async function handler(req, res) {
 
     const result = await collection.aggregate(pipeline).toArray();
 
-    res.status(200).json(result);
+    if (result.length === 0) {
+      
+      res.status(404).json({ message: "Nenhum resultado encontrado" });
+    } else {
+      
+      res.status(200).json(result);
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
