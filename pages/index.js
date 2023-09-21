@@ -128,7 +128,7 @@ export default function Reservations() {
         </span>
       );
       setTotalCorrectQuestions(totalCorrectQuestions + 1);
-      setCorrect(1)
+      setCorrect(1);
     } else {
       setResultsAnswer(
         <span
@@ -143,10 +143,9 @@ export default function Reservations() {
           {questao}: Is The Wrong Choice!. The correct answer is:{" "}
           {answers.questions[0]?.correctAnswer}
         </span>
-        
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
-      setCorrect(0)
+      setCorrect(0);
     }
   }
 
@@ -168,8 +167,6 @@ export default function Reservations() {
     { name: "medium", displayName: "Medium" },
     { name: "hard", displayName: "Hard" },
   ];
-
-
 
   // verificar as sessões
   useEffect(() => {
@@ -208,9 +205,9 @@ export default function Reservations() {
         },
         body: JSON.stringify({
           user_email: session.user.email || "not logged in",
-          questionId: answers.questions[0].id, 
+          questionId: answers.questions[0].id,
           correct: correct,
-          difficulty: answers.questions[0].difficulty, 
+          difficulty: answers.questions[0].difficulty,
         }),
       });
       return;
@@ -219,7 +216,7 @@ export default function Reservations() {
     }
   };
 
-  console.log(correct)
+  console.log(correct);
 
   return (
     <div>
@@ -324,6 +321,12 @@ export default function Reservations() {
           <Alert
             message="Without any selection, the questions will come randomly with all
             subjects and difficulties"
+            type="success"
+            showIcon
+            closable
+          />
+          <Alert
+            message="Save your stats automatically by creating a free account or logging in."
             type="success"
             showIcon
             closable
