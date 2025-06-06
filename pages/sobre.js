@@ -9,7 +9,7 @@ import {
   ChakraProvider,
   Icon,
 } from "@chakra-ui/react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 
 export default function Sobre() {
   return (
@@ -17,7 +17,7 @@ export default function Sobre() {
       <Container maxW="container.md" py={10}>
         <VStack spacing={8} align="stretch">
           <Center>
-            <Heading as="h1" size="xl" color="blue.400">
+            <Heading as="h1" size="xl" color="teal.500">
               About Trivia Game
             </Heading>
           </Center>
@@ -29,7 +29,7 @@ export default function Sobre() {
                 using the public API{" "}
                 <Link
                   href="https://the-trivia-api.com/"
-                  color="blue.400"
+                  color="teal.500"
                   isExternal
                 >
                   The Trivia API
@@ -38,12 +38,13 @@ export default function Sobre() {
               </Text>
 
               <Text fontSize="lg">
-                The game was created as a demonstration of public API
-                integration and interactive interface development using Next.js
-                and Chakra UI.
+                The game was created as a demonstration of public API integration
+                and interactive interface development using Next.js and Chakra UI.
               </Text>
 
-              <Text fontSize="lg">Project features:</Text>
+              <Text fontSize="lg">
+                Project features:
+              </Text>
 
               <Box pl={4}>
                 <ul>
@@ -62,7 +63,6 @@ export default function Sobre() {
                 <ul>
                   <li>Next.js</li>
                   <li>Chakra UI</li>
-                  <li>Ant Design</li>
                   <li>The Trivia API</li>
                   <li>React Hooks</li>
                 </ul>
@@ -75,7 +75,7 @@ export default function Sobre() {
               <Box pl={4}>
                 <Link
                   href="https://github.com/jonaszeferino/trivia"
-                  color="blue.400"
+                  color="teal.500"
                   isExternal
                   display="inline-flex"
                   alignItems="center"
@@ -83,18 +83,6 @@ export default function Sobre() {
                 >
                   <Icon as={FaGithub} w={6} h={6} />
                   GitHub Repository
-                </Link>
-                <Link
-                  href="https://www.linkedin.com/in/jonaszeferino/"
-                  color="blue.400"
-                  isExternal
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={2}
-                  p={5}
-                >
-                  <Icon as={FaLinkedin} w={6} h={6} />
-                  LinkedIn Profile
                 </Link>
               </Box>
             </VStack>

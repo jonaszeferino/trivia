@@ -30,6 +30,7 @@ import { Alert, Space } from "antd";
 import { supabase } from "../utils/supabaseClient";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FaLightbulb } from "react-icons/fa";
+import AdSense from "../components/AdSense";
 
 export default function Reservations() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -391,12 +392,17 @@ export default function Reservations() {
                 </Center>
               </Box>
 
+              {/* AdSense Banner Superior */}
+              <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
+                <AdSense adSlot="YOUR_SLOT_ID_1" />
+              </Box>
+
               {firstTime && (
                 <VStack spacing={6} align="stretch" w="full">
                   <Heading 
                     as="h1" 
                     size="xl" 
-                    bgGradient="linear(to-r, teal.400, blue.400)"
+                    bgGradient="linear(to-r, blue.400, blue.800)"
                     bgClip="text"
                     textAlign="center"
                     fontWeight="extrabold"
@@ -417,7 +423,7 @@ export default function Reservations() {
                       transition="all 0.2s"
                     >
                       <VStack spacing={4} align="stretch">
-                        <Heading as="h2" size="md" color="teal.600">
+                        <Heading as="h2" size="md" color="blue.300">
                           Did You Know?
                         </Heading>
                         <Text fontSize="lg" color="gray.600">
@@ -443,7 +449,7 @@ export default function Reservations() {
                       transition="all 0.2s"
                     >
                       <VStack spacing={4} align="stretch">
-                        <Heading as="h2" size="md" color="teal.600">
+                        <Heading as="h2" size="md" color="blue.300">
                           How to Play
                         </Heading>
                         <VStack spacing={3} align="stretch">
@@ -455,7 +461,7 @@ export default function Reservations() {
                             "Track your score as you play"
                           ].map((step, index) => (
                             <HStack key={index} spacing={3}>
-                              <Circle size="6" bg="teal.500" color="white">
+                              <Circle size="6" bg="blue.500" color="white">
                                 {index + 1}
                               </Circle>
                               <Text fontSize="lg" color="gray.600">{step}</Text>
@@ -478,7 +484,7 @@ export default function Reservations() {
                     transition="all 0.2s"
                   >
                     <VStack spacing={4} align="stretch">
-                      <Heading as="h2" size="md" color="teal.600">
+                      <Heading as="h2" size="md" color="blue.300">
                         Fun Facts About Trivia
                       </Heading>
                       <VStack spacing={3} align="stretch">
@@ -488,7 +494,7 @@ export default function Reservations() {
                           "Trivia games are proven to help improve memory and cognitive function."
                         ].map((fact, index) => (
                           <HStack key={index} spacing={3}>
-                            <Icon as={FaLightbulb} color="teal.500" />
+                            <Icon as={FaLightbulb} color="blue.500" />
                             <Text fontSize="lg" color="gray.600">{fact}</Text>
                           </HStack>
                         ))}
@@ -534,8 +540,8 @@ export default function Reservations() {
                 </Center>
               )}
 
-              {!firstTime && (
-                <VStack spacing={6} w="full">
+              {!firstTime && answers.questions.length > 0 && (
+                <VStack spacing={6}>
                   <Box 
                     w="full" 
                     bg="white" 
@@ -544,7 +550,7 @@ export default function Reservations() {
                     boxShadow="lg"
                   >
                     <VStack spacing={4}>
-                      <Heading as="h2" size="lg" color="teal.600">
+                      <Heading as="h2" size="lg" color="black">
                         {answers.questions[0]?.question}
                       </Heading>
                       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
@@ -638,6 +644,11 @@ export default function Reservations() {
                         </Button>
                       </SimpleGrid>
                     </VStack>
+                  </Box>
+
+                  {/* AdSense Banner Lateral */}
+                  <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
+                    <AdSense adSlot="YOUR_SLOT_ID_2" />
                   </Box>
 
                   <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
