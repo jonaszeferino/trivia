@@ -26,13 +26,13 @@ import { Alert, Space } from "antd";
 import { supabase } from "../utils/supabaseClient";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FaLightbulb } from "react-icons/fa";
-import AdSense from "../components/AdSense";
+// import AdSense from "../components/AdSense";
 import dynamic from "next/dynamic";
 
 // Carrega componentes que usam window apenas no client-side
-const DynamicAdSense = dynamic(() => import("../components/AdSense"), {
-  ssr: false,
-});
+// const DynamicAdSense = dynamic(() => import("../components/AdSense"), {
+//   ssr: false,
+// });
 
 export default function Reservations() {
   const [mounted, setMounted] = useState(false);
@@ -635,7 +635,8 @@ export default function Reservations() {
                   )}
 
                   <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
-                    <DynamicAdSense adSlot="9876543210" format="rectangle" />
+                    {/* Temporariamente comentado para teste */}
+                    {/* <DynamicAdSense adSlot="9876543210" format="rectangle" /> */}
                   </Box>
 
                   <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
