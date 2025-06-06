@@ -3,19 +3,36 @@ import styles from "../styles/Home.module.css";
 import {
   Button,
   Checkbox,
-  Stack,
+  Center,
   Text,
   VStack,
   HStack,
   Box,
   ChakraProvider,
-  Center,
-  Link,
+  SimpleGrid,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  IconButton,
+  Heading,
+  Container,
+  Circle,
+  Stat,
+  StatLabel,
+  StatNumber,
+  Icon,
 } from "@chakra-ui/react";
 import { Alert, Space } from "antd";
 import { supabase } from "../utils/supabaseClient";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { FaLightbulb } from "react-icons/fa";
 
 export default function Reservations() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [answers, setAnswers] = useState({ questions: [] });
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [resultsAnswer, setResultsAnswer] = useState("");
@@ -222,316 +239,450 @@ export default function Reservations() {
   return (
     <div>
       <ChakraProvider>
-        <ChakraProvider>
-          {session ? (
-            <p>
-              <Center>
-                {session.user.email} <br />
+        <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="md">
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader borderBottomWidth="1px">Game Options</DrawerHeader>
+
+            <DrawerBody>
+              <VStack spacing={6} align="stretch">
+                <Box>
+                  <Text fontSize="xl" fontWeight="bold" mb={4}>
+                    Categories
+                  </Text>
+                  <SimpleGrid columns={1} spacing={4}>
+                    {categoryOptions.map((category, index) => (
+                      <Box
+                        key={index}
+                        p={2}
+                        borderRadius="md"
+                        _hover={{ bg: "gray.50" }}
+                      >
+                        <HStack>
+                          <Checkbox
+                            id={category.name}
+                            name={category.name}
+                            isChecked={selectedCategories.includes(
+                              category.name
+                            )}
+                            onChange={(event) => {
+                              const isChecked = event.target.checked;
+                              setSelectedCategories((prevState) =>
+                                isChecked
+                                  ? [...prevState, category.name]
+                                  : prevState.filter((c) => c !== category.name)
+                              );
+                            }}
+                          />
+                          <label htmlFor={category.name}>
+                            {category.displayName}
+                          </label>
+                        </HStack>
+                      </Box>
+                    ))}
+                  </SimpleGrid>
+                </Box>
+
+                <Box>
+                  <Text fontSize="xl" fontWeight="bold" mb={4}>
+                    Difficulty
+                  </Text>
+                  <SimpleGrid columns={1} spacing={4}>
+                    {difficultyOptions.map((difficulty, index) => (
+                      <Box
+                        key={index}
+                        p={2}
+                        borderRadius="md"
+                        _hover={{ bg: "gray.50" }}
+                      >
+                        <HStack>
+                          <Checkbox
+                            id={difficulty.name}
+                            name={difficulty.name}
+                            isChecked={selectedDifficulties.includes(
+                              difficulty.name
+                            )}
+                            onChange={(event) => {
+                              const isChecked = event.target.checked;
+                              if (isChecked) {
+                                setSelectedDifficulties([difficulty.name]);
+                              } else {
+                                setSelectedDifficulties((prevState) =>
+                                  prevState.filter((d) => d !== difficulty.name)
+                                );
+                              }
+                            }}
+                          />
+                          <label htmlFor={difficulty.name}>
+                            {difficulty.displayName}
+                          </label>
+                        </HStack>
+                      </Box>
+                    ))}
+                  </SimpleGrid>
+                </Box>
+              </VStack>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+
+        <Box 
+          minH="100vh" 
+          bgGradient="linear(to-b, blue.100, white)"
+          py={8}
+        >
+          <Container maxW="container.xl">
+            <VStack spacing={8}>
+              <Box 
+                w="full" 
+                bg="white" 
+                p={6} 
+                borderRadius="xl" 
+                boxShadow="lg"
+                position="relative"
+                _before={{
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "4px",
+                  bgGradient: "linear(to-r, blue.500, blue.600)",
+                  borderTopRadius: "xl"
+                }}
+              >
+                <Center>
+                  <HStack spacing={4}>
+                    <Button
+                      onClick={() => {
+                        apiCall();
+                        setFirstTime(false);
+                        setTotalQuestions(0);
+                        setTotalCorrectQuestions(0);
+                        setTotalWrongQuestions(0);
+                        setisDisabled(false);
+                      }}
+                      colorScheme="blue"
+                      size="lg"
+                      px={8}
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "lg"
+                      }}
+                      transition="all 0.2s"
+                    >
+                      Start Game
+                    </Button>
+                    <Button
+                      onClick={onOpen}
+                      colorScheme="blue"
+                      size="lg"
+                      px={8}
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "lg"
+                      }}
+                      transition="all 0.2s"
+                    >
+                      Options
+                    </Button>
+                  </HStack>
+                </Center>
+              </Box>
+
+              {firstTime && (
+                <VStack spacing={6} align="stretch" w="full">
+                  <Heading 
+                    as="h1" 
+                    size="xl" 
+                    bgGradient="linear(to-r, teal.400, blue.400)"
+                    bgClip="text"
+                    textAlign="center"
+                    fontWeight="extrabold"
+                  >
+                    Welcome to Trivia Game!
+                  </Heading>
+
+                  <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                    <Box 
+                      p={6} 
+                      borderRadius="xl" 
+                      boxShadow="lg" 
+                      bg="white"
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "xl"
+                      }}
+                      transition="all 0.2s"
+                    >
+                      <VStack spacing={4} align="stretch">
+                        <Heading as="h2" size="md" color="teal.600">
+                          Did You Know?
+                        </Heading>
+                        <Text fontSize="lg" color="gray.600">
+                          The word "trivia" comes from the Latin "trivium," meaning "the place where three roads meet." 
+                          In ancient times, this was where people would gather to share knowledge and stories.
+                        </Text>
+                        <Text fontSize="lg" color="gray.600">
+                          Modern trivia games became popular in the 1960s with the board game "Trivial Pursuit," 
+                          which has sold over 100 million copies worldwide.
+                        </Text>
+                      </VStack>
+                    </Box>
+
+                    <Box 
+                      p={6} 
+                      borderRadius="xl" 
+                      boxShadow="lg" 
+                      bg="white"
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "xl"
+                      }}
+                      transition="all 0.2s"
+                    >
+                      <VStack spacing={4} align="stretch">
+                        <Heading as="h2" size="md" color="teal.600">
+                          How to Play
+                        </Heading>
+                        <VStack spacing={3} align="stretch">
+                          {[
+                            "Choose your preferred categories and difficulty level",
+                            "Click \"Start Game\" to begin",
+                            "Read each question carefully and select your answer",
+                            "Get immediate feedback on your answer",
+                            "Track your score as you play"
+                          ].map((step, index) => (
+                            <HStack key={index} spacing={3}>
+                              <Circle size="6" bg="teal.500" color="white">
+                                {index + 1}
+                              </Circle>
+                              <Text fontSize="lg" color="gray.600">{step}</Text>
+                            </HStack>
+                          ))}
+                        </VStack>
+                      </VStack>
+                    </Box>
+                  </SimpleGrid>
+
+                  <Box 
+                    p={6} 
+                    borderRadius="xl" 
+                    boxShadow="lg" 
+                    bg="white"
+                    _hover={{
+                      transform: "translateY(-2px)",
+                      boxShadow: "xl"
+                    }}
+                    transition="all 0.2s"
+                  >
+                    <VStack spacing={4} align="stretch">
+                      <Heading as="h2" size="md" color="teal.600">
+                        Fun Facts About Trivia
+                      </Heading>
+                      <VStack spacing={3} align="stretch">
+                        {[
+                          "The world's largest trivia contest is held annually in Wisconsin, USA, lasting 54 hours straight!",
+                          "The first known trivia game was created in 1964 by Canadian journalists Scott Abbott and Chris Haney.",
+                          "Trivia games are proven to help improve memory and cognitive function."
+                        ].map((fact, index) => (
+                          <HStack key={index} spacing={3}>
+                            <Icon as={FaLightbulb} color="teal.500" />
+                            <Text fontSize="lg" color="gray.600">{fact}</Text>
+                          </HStack>
+                        ))}
+                      </VStack>
+                    </VStack>
+                  </Box>
+                </VStack>
+              )}
+
+              <Box 
+                w="full" 
+                bg="white" 
+                p={4} 
+                borderRadius="xl" 
+                boxShadow="md"
+              >
+                <Alert
+                  message="Without any selection, the questions will come randomly with all subjects and difficulties"
+                  type="success"
+                  showIcon
+                  closable
+                />
+              </Box>
+
+              {!firstTime && (
                 <Center>
                   <Button
-                    onClick={() => supabase.auth.signOut()}
-                    colorScheme="red"
-                    size="sm"
+                    onClick={() => {
+                      apiCall();
+                      setisDisabled(false);
+                    }}
+                    colorScheme="blue"
+                    size="lg"
+                    px={8}
+                    _hover={{
+                      transform: "translateY(-2px)",
+                      boxShadow: "lg"
+                    }}
+                    transition="all 0.2s"
                   >
-                    Sair
+                    Next Question
                   </Button>
                 </Center>
-              </Center>
-            </p>
-          ) : (
-            <ChakraProvider>
-              <Center>
-                <Center>
-                  <Text>
-                    <Link href="/signUp">
-                      <Button>Login</Button>
-                    </Link>
-                  </Text>
-                </Center>
-                <Text>
-                  <strong>Você Não Está Logado</strong>
-                </Text>
-              </Center>
-            </ChakraProvider>
-          )}
-        </ChakraProvider>
+              )}
 
-        <br />
-        <Center>
-          <HStack spacing={4} align="center">
-            <Button onClick={toggleCategoryOptions}>Options</Button>
-          </HStack>
-        </Center>
-        <Center>
-          {showCategoryOptions && (
-            <VStack align="start" spacing={4}>
-              <Center>
-                <Box>
-                  <Text>Areas:</Text>
-                  {categoryOptions.map((category, index) => (
-                    <HStack key={index}>
-                      <Checkbox
-                        id={category.name}
-                        name={category.name}
-                        isChecked={selectedCategories.includes(category.name)}
-                        onChange={(event) => {
-                          const isChecked = event.target.checked;
-                          setSelectedCategories((prevState) =>
-                            isChecked
-                              ? [...prevState, category.name]
-                              : prevState.filter((c) => c !== category.name)
-                          );
-                        }}
-                      />
-                      <label htmlFor={category.name}>
-                        {category.displayName}
-                      </label>
-                    </HStack>
-                  ))}
-                </Box>
-              </Center>
-              <Center>
-                <Box>
-                  <Text>Difficulty:</Text>
-
-                  <HStack spacing={2}>
-                    {difficultyOptions.map((difficulty, index) => (
-                      <HStack key={index}>
-                        <Checkbox
-                          id={difficulty.name}
-                          name={difficulty.name}
-                          isChecked={selectedDifficulties.includes(
-                            difficulty.name
-                          )}
-                          onChange={(event) => {
-                            const isChecked = event.target.checked;
-                            if (isChecked) {
-                              // Se um novo é marcado, desmarque todos os outros
-                              setSelectedDifficulties([difficulty.name]);
-                            } else {
-                              // Se for desmarcado, remova-o da lista
-                              setSelectedDifficulties((prevState) =>
-                                prevState.filter((d) => d !== difficulty.name)
-                              );
-                            }
+              {!firstTime && (
+                <VStack spacing={6} w="full">
+                  <Box 
+                    w="full" 
+                    bg="white" 
+                    p={6} 
+                    borderRadius="xl" 
+                    boxShadow="lg"
+                  >
+                    <VStack spacing={4}>
+                      <Heading as="h2" size="lg" color="teal.600">
+                        {answers.questions[0]?.question}
+                      </Heading>
+                      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
+                        <Button
+                          style={{ backgroundColor: isClickedA }}
+                          onClick={() => {
+                            getResultAnswer(shuffledAnswers[0], "A");
+                            setIsClickedA("#0070f3");
+                            insertStats();
                           }}
-                        />
-                        <label htmlFor={difficulty.name}>
-                          {difficulty.displayName}
-                        </label>
-                      </HStack>
-                    ))}
-                  </HStack>
-                </Box>
-              </Center>
+                          isDisabled={isDisabled}
+                          colorScheme={isClickedA ? "teal" : "gray"}
+                          size="lg"
+                          h="auto"
+                          py={4}
+                          whiteSpace="normal"
+                          textAlign="left"
+                          _hover={{
+                            transform: "translateY(-2px)",
+                            boxShadow: "lg"
+                          }}
+                          transition="all 0.2s"
+                        >
+                          A: {shuffledAnswers[0]}
+                        </Button>
+                        <Button
+                          style={{ backgroundColor: isClickedB }}
+                          onClick={() => {
+                            getResultAnswer(shuffledAnswers[1], "B");
+                            setIsClickedB("#0070f3");
+                            insertStats();
+                          }}
+                          isDisabled={isDisabled}
+                          colorScheme={isClickedB ? "teal" : "gray"}
+                          size="lg"
+                          h="auto"
+                          py={4}
+                          whiteSpace="normal"
+                          textAlign="left"
+                          _hover={{
+                            transform: "translateY(-2px)",
+                            boxShadow: "lg"
+                          }}
+                          transition="all 0.2s"
+                        >
+                          B: {shuffledAnswers[1]}
+                        </Button>
+                        <Button
+                          style={{ backgroundColor: isClickedC }}
+                          onClick={() => {
+                            getResultAnswer(shuffledAnswers[2], "C");
+                            setIsClickedC("#0070f3");
+                            insertStats();
+                          }}
+                          isDisabled={isDisabled}
+                          colorScheme={isClickedC ? "teal" : "gray"}
+                          size="lg"
+                          h="auto"
+                          py={4}
+                          whiteSpace="normal"
+                          textAlign="left"
+                          _hover={{
+                            transform: "translateY(-2px)",
+                            boxShadow: "lg"
+                          }}
+                          transition="all 0.2s"
+                        >
+                          C: {shuffledAnswers[2]}
+                        </Button>
+                        <Button
+                          style={{ backgroundColor: isClickedD }}
+                          onClick={() => {
+                            getResultAnswer(shuffledAnswers[3], "D");
+                            setIsClickedD("#0070f3");
+                            insertStats();
+                          }}
+                          isDisabled={isDisabled}
+                          colorScheme={isClickedD ? "teal" : "gray"}
+                          size="lg"
+                          h="auto"
+                          py={4}
+                          whiteSpace="normal"
+                          textAlign="left"
+                          _hover={{
+                            transform: "translateY(-2px)",
+                            boxShadow: "lg"
+                          }}
+                          transition="all 0.2s"
+                        >
+                          D: {shuffledAnswers[3]}
+                        </Button>
+                      </SimpleGrid>
+                    </VStack>
+                  </Box>
+
+                  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
+                    <Stat
+                      px={6}
+                      py={4}
+                      shadow="lg"
+                      border="1px"
+                      borderColor="gray.200"
+                      rounded="lg"
+                      bg="white"
+                    >
+                      <StatLabel color="gray.500">Total Questions</StatLabel>
+                      <StatNumber color="teal.500">{totalQuestions}</StatNumber>
+                    </Stat>
+                    <Stat
+                      px={6}
+                      py={4}
+                      shadow="lg"
+                      border="1px"
+                      borderColor="gray.200"
+                      rounded="lg"
+                      bg="white"
+                    >
+                      <StatLabel color="gray.500">Correct Answers</StatLabel>
+                      <StatNumber color="green.500">{totalCorrectQuestions}</StatNumber>
+                    </Stat>
+                    <Stat
+                      px={6}
+                      py={4}
+                      shadow="lg"
+                      border="1px"
+                      borderColor="gray.200"
+                      rounded="lg"
+                      bg="white"
+                    >
+                      <StatLabel color="gray.500">Wrong Answers</StatLabel>
+                      <StatNumber color="red.500">{totalWrongQuestions}</StatNumber>
+                    </Stat>
+                  </SimpleGrid>
+                </VStack>
+              )}
             </VStack>
-          )}
-        </Center>
-      </ChakraProvider>
-      <Center>
-        <Space
-          direction="vertical"
-          style={{
-            magin: "10px",
-          }}
-        >
-          <Alert
-            message="Without any selection, the questions will come randomly with all
-            subjects and difficulties"
-            type="success"
-            showIcon
-            closable
-          />
-          <Alert
-            message="Save your stats automatically by creating a free account or logging in."
-            type="success"
-            showIcon
-            closable
-          />
-        </Space>
-
-        <Text style={{ margin: "10px" }}></Text>
-      </Center>
-
-      <br />
-
-      <ChakraProvider>
-        <Box>
-          <Center>
-            <Button
-              onClick={() => {
-                apiCall();
-                setFirstTime(false);
-                setTotalQuestions(0);
-                setTotalCorrectQuestions(0);
-                setTotalWrongQuestions(0);
-                setisDisabled(false);
-              }}
-            >
-              Start
-            </Button>
-            <br />
-            <br />
-            <br />
-          </Center>
-          <Center>
-            <br />
-            {!firstTime && (
-              <Button
-                onClick={() => {
-                  apiCall(), setisDisabled(false);
-                }}
-                colorScheme="blue"
-              >
-                Next Question
-              </Button>
-            )}
-          </Center>
-          <br />
+          </Container>
         </Box>
-        <Stack spacing={4} align="center">
-          {answers.questions.length > 0 && (
-            <Box>
-              <Text style={{ margin: "10px" }}>
-                {answers.questions[0]?.question}
-              </Text>
-
-              <br />
-              <Center>
-                <VStack spacing={2} align="start">
-                  <HStack spacing={2} align="start">
-                    <Button
-                      style={{ backgroundColor: isClickedA }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[0], "A");
-                        setIsClickedA("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      A
-                    </Button>{" "}
-                    <Button
-                      style={{ backgroundColor: isClickedA }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[0], "A");
-                        setIsClickedA("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      {shuffledAnswers[0]}
-                    </Button>{" "}
-                  </HStack>
-                  <HStack spacing={2} align="start">
-                    <Button
-                      style={{ backgroundColor: isClickedB }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[1], "B");
-                        setIsClickedB("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      B
-                    </Button>{" "}
-                    <Button
-                      style={{ backgroundColor: isClickedB }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[1], "B");
-                        setIsClickedB("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      {shuffledAnswers[1]}
-                    </Button>{" "}
-                  </HStack>
-                  <HStack spacing={2} align="start">
-                    <Button
-                      style={{ backgroundColor: isClickedC }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[2], "C");
-                        setIsClickedC("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      C
-                    </Button>{" "}
-                    <Button
-                      style={{ backgroundColor: isClickedC }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[2], "C");
-                        setIsClickedC("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      {shuffledAnswers[2]}
-                    </Button>{" "}
-                  </HStack>
-                  <HStack spacing={2} align="start">
-                    <Button
-                      style={{ backgroundColor: isClickedD }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[3], "D");
-                        setIsClickedD("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      D
-                    </Button>{" "}
-                    <Button
-                      style={{ backgroundColor: isClickedD }}
-                      onClick={() => {
-                        getResultAnswer(shuffledAnswers[3], "D");
-                        setIsClickedD("#0070f3");
-                        insertStats();
-                      }}
-                      isDisabled={isDisabled}
-                    >
-                      {shuffledAnswers[3]}
-                    </Button>{" "}
-                  </HStack>
-                </VStack>
-              </Center>
-              <br />
-              <Text textAlign="center">
-                <span>{resultsAnswer}</span>
-                <br />
-                <br />
-                <Text textAlign="center">
-                  <span>
-                    Difficulty:
-                    <strong> {answers.questions[0]?.difficulty} </strong>
-                  </span>{" "}
-                  <span>
-                    Category: <strong> {answers.questions[0]?.category}</strong>
-                  </span>
-                </Text>
-
-                <VStack spacing={2} align="center">
-                  <Text>
-                    <strong>Total:</strong>{" "}
-                    <Text as="span" color="black">
-                      <strong>{totalQuestions}</strong>
-                    </Text>{" "}
-                    <strong>Corrects:</strong>{" "}
-                    <Text as="span" color="green">
-                      <strong>{totalCorrectQuestions} </strong>
-                    </Text>{" "}
-                    <strong>Wrong:</strong>{" "}
-                    <Text as="span" color="red">
-                      <strong> {totalWrongQuestions}</strong>
-                    </Text>
-                  </Text>
-                </VStack>
-              </Text>
-            </Box>
-          )}
-        </Stack>
       </ChakraProvider>
     </div>
   );

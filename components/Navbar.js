@@ -1,86 +1,75 @@
-import Link from "next/link";
-import styles from "../styles/Navbar.module.css";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
+  Box,
+  Flex,
+  HStack,
   IconButton,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  useDisclosure,
+  Stack,
+  useColorModeValue,
+  Text,
   ChakraProvider,
-  ModalCloseButton,
-  Center,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import Auth from "./Auth";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
-export default function Navbar({ isLoading, onAuthenticated }) {
+export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [session, setSession] = useState(null);
-  
 
-return (
-    <ul className={styles.navbar}>
-      <li>
-        <Link href="/">
-          <a>| Home</a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/my-stats">
-          <a>| Minhas Estatisticas |</a>
-        </Link>
-      </li>
-      <li>
-          <button onClick={onOpen}>Login |</button>
-        </li>
-      <li>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent style={{ background: "white" }}>
-            <ModalHeader>
-              Login
-              <IconButton
-                
-                colorScheme="gray"
-                variant="ghost"
-                ml="auto"
-                onClick={onClose}
-              />
-            </ModalHeader>
-            <ModalBody>
-              <Auth onClose={onClose} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent style={{ background: "white" }}>
-            <ModalHeader>
-              Login{" "}
-              <IconButton
-                
-                colorScheme="gray"
-                variant="ghost"
-                position="absolute"
-                top="0"
-                right="0"
-                onClick={onClose}
-              />
-            </ModalHeader>
-            <ModalBody>
-              <Auth onAuthenticated={onAuthenticated} onClose={onClose} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-        </li>
-    </ul>
+  const links = [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" }
+    
+  ];
+
+  const NavLink = ({ href, label }) => (
+    <ChakraProvider>
+      {" "}
+      <Link href={href} passHref legacyBehavior>
+        <Button
+          as="a"
+          variant="ghost"
+          _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
+        >
+          {label}
+        </Button>
+      </Link>
+    </ChakraProvider>
+  );
+
+  return (
+    <ChakraProvider>
+      <Box bg={useColorModeValue("white", "gray.900")} px={4} boxShadow="sm">
+        <Flex h={16} alignItems="center" justifyContent="space-between">
+          <Text fontWeight="bold" fontSize="lg">
+            Trivia
+          </Text>
+
+          <IconButton
+            size="md"
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label="Menu"
+            display={{ md: "none" }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+
+          <HStack spacing={6} display={{ base: "none", md: "flex" }}>
+            {links.map((link) => (
+              <NavLink key={link.href} href={link.href} label={link.label} />
+            ))}
+          </HStack>
+        </Flex>
+
+        {isOpen && (
+          <Box pb={4} display={{ md: "none" }}>
+            <Stack spacing={4}>
+              {links.map((link) => (
+                <NavLink key={link.href} href={link.href} label={link.label} />
+              ))}
+            </Stack>
+          </Box>
+        )}
+      </Box>
+    </ChakraProvider>
   );
 }
