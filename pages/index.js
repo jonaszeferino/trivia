@@ -26,16 +26,21 @@ import { supabase } from "../utils/supabaseClient";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FaLightbulb } from "react-icons/fa";
 import AdSense from "../components/AdSense";
+import dynamic from "next/dynamic";
+
+// Carrega componentes que usam window apenas no client-side
+const DynamicAdSense = dynamic(() => import("../components/AdSense"), {
+  ssr: false,
+});
 
 export default function Reservations() {
+  const [mounted, setMounted] = useState(false);
   const { isOpen, onToggle } = useDisclosure();
   const [answers, setAnswers] = useState({ questions: [] });
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [resultsAnswer, setResultsAnswer] = useState("");
   const [categories, setCategories] = useState("");
-
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
-
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [resultado, setResultado] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -48,15 +53,16 @@ export default function Reservations() {
   const [isClickedB, setIsClickedB] = useState("");
   const [isClickedC, setIsClickedC] = useState("");
   const [isClickedD, setIsClickedD] = useState("");
-
   const [firstTime, setFirstTime] = useState(true);
-
   const [showCategoryOptions, setShowCategoryOptions] = useState(true);
   const [hasAnswered, setHasAnswered] = useState(false);
-
   const [session, setSession] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [correct, setCorrect] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleCategoryOptions = () => setShowCategoryOptions((prev) => !prev);
 
@@ -76,9 +82,6 @@ export default function Reservations() {
       choice = "&difficulty=hard";
     }
 
-    console.log(selectedDifficulties);
-    console.log(choice);
-
     const url = `https://the-trivia-api.com/api/questions?limit=1&categories=${selectedCategories.join(
       ","
     )}${choice}`;
@@ -86,8 +89,6 @@ export default function Reservations() {
     setSelectedAnswer("");
     setResultado("");
     setTotalQuestions(totalQuestions + 1);
-
-    console.log("o que chamou: " + url);
 
     fetch(url)
       .then((response) => {
@@ -109,7 +110,7 @@ export default function Reservations() {
           })),
         });
       })
-      .catch((error) => setError(true));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -183,7 +184,6 @@ export default function Reservations() {
     { name: "hard", displayName: "Hard" },
   ];
 
-  // verificar as sessões
   useEffect(() => {
     let mounted = true;
     async function getInitialSession() {
@@ -209,8 +209,6 @@ export default function Reservations() {
     };
   }, []);
 
-  //Enviar stats
-
   const insertStats = async () => {
     try {
       const response = await fetch("/api/v1/postStatsTrivia", {
@@ -219,10 +217,10 @@ export default function Reservations() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_email: session.user.email || "not logged in",
-          questionId: answers.questions[0].id,
+          user_email: session?.user?.email || "not logged in",
+          questionId: answers.questions[0]?.id,
           correct: correct,
-          difficulty: answers.questions[0].difficulty,
+          difficulty: answers.questions[0]?.difficulty,
         }),
       });
       return;
@@ -231,7 +229,7 @@ export default function Reservations() {
     }
   };
 
-  console.log(correct);
+  if (!mounted) return null;
 
   return (
     <div>
@@ -300,7 +298,7 @@ export default function Reservations() {
                 </Center>
               </Box>
 
-              <Collapse in={isOpen} animateOpacity>
+              <Collapse in={isOpen} animateOpacity style={{ width: "100%" }}>
                 <Box 
                   w="full" 
                   bg="white" 
@@ -391,7 +389,7 @@ export default function Reservations() {
 
               {/* AdSense Banner Superior */}
               <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
-                <AdSense adSlot="1234567890" format="banner" />
+                <DynamicAdSense adSlot="1234567890" format="banner" />
               </Box>
 
               {firstTime && (
@@ -643,17 +641,14 @@ export default function Reservations() {
                     </VStack>
                   </Box>
 
-                  
                   {resultsAnswer && (
                     <Box w="full">
                       {resultsAnswer}
                     </Box>
                   )}
 
-            
-
                   <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
-                    <AdSense adSlot="9876543210" format="rectangle" />
+                    <DynamicAdSense adSlot="9876543210" format="rectangle" />
                   </Box>
 
                   <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
