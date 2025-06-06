@@ -26,6 +26,7 @@ export default function Navbar({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showOptions, setShowOptions] = useState(false);
+  const hoverBg = useColorModeValue("gray.200", "gray.700");
 
   const links = [
     { label: "Home", href: "/" },
@@ -57,7 +58,7 @@ export default function Navbar({
         <Button
           as="a"
           variant="ghost"
-          _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
+          _hover={{ bg: hoverBg }}
         >
           {label}
         </Button>
@@ -80,7 +81,7 @@ export default function Navbar({
             <Button
               onClick={() => setShowOptions(!showOptions)}
               variant="ghost"
-              _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
+              _hover={{ bg: hoverBg }}
             >
               Game Options
             </Button>
@@ -104,7 +105,7 @@ export default function Navbar({
               <Button
                 onClick={() => setShowOptions(!showOptions)}
                 variant="ghost"
-                _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
+                _hover={{ bg: hoverBg }}
               >
                 Game Options
               </Button>
