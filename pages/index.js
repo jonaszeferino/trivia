@@ -240,8 +240,14 @@ export default function Reservations() {
   return (
     <div>
       <ChakraProvider>
-        <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="md">
-          <DrawerOverlay />
+        <Drawer 
+          isOpen={isOpen} 
+          placement="right" 
+          onClose={onClose} 
+          size="md"
+          blockScrollOnMount={false}
+        >
+          <DrawerOverlay backdropFilter="blur(2px)" />
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader borderBottomWidth="1px">Game Options</DrawerHeader>
@@ -264,9 +270,7 @@ export default function Reservations() {
                           <Checkbox
                             id={category.name}
                             name={category.name}
-                            isChecked={selectedCategories.includes(
-                              category.name
-                            )}
+                            isChecked={selectedCategories.includes(category.name)}
                             onChange={(event) => {
                               const isChecked = event.target.checked;
                               setSelectedCategories((prevState) =>
@@ -301,9 +305,7 @@ export default function Reservations() {
                           <Checkbox
                             id={difficulty.name}
                             name={difficulty.name}
-                            isChecked={selectedDifficulties.includes(
-                              difficulty.name
-                            )}
+                            isChecked={selectedDifficulties.includes(difficulty.name)}
                             onChange={(event) => {
                               const isChecked = event.target.checked;
                               if (isChecked) {
@@ -394,7 +396,7 @@ export default function Reservations() {
 
               {/* AdSense Banner Superior */}
               <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
-                <AdSense adSlot="YOUR_SLOT_ID_1" />
+                <AdSense adSlot="1234567890" format="banner" />
               </Box>
 
               {firstTime && (
@@ -646,9 +648,8 @@ export default function Reservations() {
                     </VStack>
                   </Box>
 
-                  {/* AdSense Banner Lateral */}
                   <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
-                    <AdSense adSlot="YOUR_SLOT_ID_2" />
+                    <AdSense adSlot="9876543210" format="rectangle" />
                   </Box>
 
                   <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
