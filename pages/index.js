@@ -387,10 +387,9 @@ export default function Reservations() {
                 </Box>
               </Collapse>
 
-              {/* AdSense Banner Superior */}
-              <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
+              {/* <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
                 <DynamicAdSense adSlot="1234567890" format="banner" />
-              </Box>
+              </Box> */}
 
               {firstTime && (
                 <VStack spacing={6} align="stretch" w="full">
