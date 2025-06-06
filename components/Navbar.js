@@ -9,22 +9,50 @@ import {
   useColorModeValue,
   Text,
   ChakraProvider,
+  VStack,
+  SimpleGrid,
+  Checkbox,
+  SlideFade,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import { useState } from "react";
 
-export default function Navbar() {
+export default function Navbar({ 
+  selectedCategories, 
+  setSelectedCategories, 
+  selectedDifficulties, 
+  setSelectedDifficulties 
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showOptions, setShowOptions] = useState(false);
 
   const links = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" }
-    
+  ];
+
+  const categoryOptions = [
+    { name: "arts_and_literature", displayName: "Arts & Literature" },
+    { name: "film_and_tv", displayName: "Cinema & TV" },
+    { name: "food_and_drink", displayName: "Food & Drink" },
+    { name: "general_knowledge", displayName: "General Knowledge" },
+    { name: "geography", displayName: "Geography" },
+    { name: "history", displayName: "History" },
+    { name: "music", displayName: "Music" },
+    { name: "science", displayName: "Science" },
+    { name: "society_and_culture", displayName: "Society & Culture" },
+    { name: "sport_and_leisure", displayName: "Sport & Leisure" },
+  ];
+
+  const difficultyOptions = [
+    { name: "easy", displayName: "Easy" },
+    { name: "medium", displayName: "Medium" },
+    { name: "hard", displayName: "Hard" },
   ];
 
   const NavLink = ({ href, label }) => (
     <ChakraProvider>
-      {" "}
       <Link href={href} passHref legacyBehavior>
         <Button
           as="a"
@@ -45,6 +73,19 @@ export default function Navbar() {
             Trivia
           </Text>
 
+          <HStack spacing={6} display={{ base: "none", md: "flex" }}>
+            {links.map((link) => (
+              <NavLink key={link.href} href={link.href} label={link.label} />
+            ))}
+            <Button
+              onClick={() => setShowOptions(!showOptions)}
+              variant="ghost"
+              _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
+            >
+              Game Options
+            </Button>
+          </HStack>
+
           <IconButton
             size="md"
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -52,12 +93,6 @@ export default function Navbar() {
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
           />
-
-          <HStack spacing={6} display={{ base: "none", md: "flex" }}>
-            {links.map((link) => (
-              <NavLink key={link.href} href={link.href} label={link.label} />
-            ))}
-          </HStack>
         </Flex>
 
         {isOpen && (
@@ -66,9 +101,107 @@ export default function Navbar() {
               {links.map((link) => (
                 <NavLink key={link.href} href={link.href} label={link.label} />
               ))}
+              <Button
+                onClick={() => setShowOptions(!showOptions)}
+                variant="ghost"
+                _hover={{ bg: useColorModeValue("gray.200", "gray.700") }}
+              >
+                Game Options
+              </Button>
             </Stack>
           </Box>
         )}
+
+        <SlideFade in={showOptions} offsetY="-20px">
+          {showOptions && (
+            <Box 
+              w="full" 
+              bg="white" 
+              p={6} 
+              borderRadius="xl" 
+              boxShadow="lg"
+              mb={4}
+            >
+              <VStack spacing={6} align="stretch">
+                <Box>
+                  <Text fontSize="xl" fontWeight="bold" mb={4}>
+                    Categories
+                  </Text>
+                  <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+                    {categoryOptions.map((category, index) => (
+                      <Box
+                        key={index}
+                        p={3}
+                        borderRadius="md"
+                        border="1px"
+                        borderColor="gray.200"
+                        _hover={{ bg: "gray.50" }}
+                      >
+                        <HStack>
+                          <Checkbox
+                            id={category.name}
+                            name={category.name}
+                            isChecked={selectedCategories.includes(category.name)}
+                            onChange={(event) => {
+                              const isChecked = event.target.checked;
+                              setSelectedCategories((prevState) =>
+                                isChecked
+                                  ? [...prevState, category.name]
+                                  : prevState.filter((c) => c !== category.name)
+                              );
+                            }}
+                          />
+                          <label htmlFor={category.name}>
+                            {category.displayName}
+                          </label>
+                        </HStack>
+                      </Box>
+                    ))}
+                  </SimpleGrid>
+                </Box>
+
+                <Box>
+                  <Text fontSize="xl" fontWeight="bold" mb={4}>
+                    Difficulty
+                  </Text>
+                  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+                    {difficultyOptions.map((difficulty, index) => (
+                      <Box
+                        key={index}
+                        p={3}
+                        borderRadius="md"
+                        border="1px"
+                        borderColor="gray.200"
+                        _hover={{ bg: "gray.50" }}
+                      >
+                        <HStack>
+                          <Checkbox
+                            id={difficulty.name}
+                            name={difficulty.name}
+                            isChecked={selectedDifficulties.includes(difficulty.name)}
+                            onChange={(event) => {
+                              const isChecked = event.target.checked;
+                              if (isChecked) {
+                                setSelectedDifficulties([difficulty.name]);
+                              } else {
+                                setSelectedDifficulties((prevState) =>
+                                  prevState.filter((d) => d !== difficulty.name)
+                                );
+                              }
+                            }}
+                          />
+                          <label htmlFor={difficulty.name}>
+                            {difficulty.displayName}
+                          </label>
+                        </HStack>
+                      </Box>
+                    ))}
+                  </SimpleGrid>
+                </Box>
+              </VStack>
+            </Box>
+          )}
+        </SlideFade>
       </Box>
     </ChakraProvider>
   );
