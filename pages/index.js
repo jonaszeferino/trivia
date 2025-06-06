@@ -134,34 +134,35 @@ export default function Reservations() {
     setisDisabled(true);
     if (recebido === answers.questions[0]?.correctAnswer) {
       setResultsAnswer(
-        <span
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            backgroundColor: "green",
-            borderRadius: "7px",
-            padding: "7px",
-          }}
+        <Box 
+          bg="green.500" 
+          color="white" 
+          p={4} 
+          borderRadius="md" 
+          textAlign="center"
+          fontWeight="bold"
+          fontSize="xl"
+          boxShadow="lg"
         >
-          Correct!
-        </span>
+          Correct Answer! 🎉
+        </Box>
       );
       setTotalCorrectQuestions(totalCorrectQuestions + 1);
       setCorrect(1);
     } else {
       setResultsAnswer(
-        <span
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            backgroundColor: "red",
-            borderRadius: "7px",
-            padding: "7px",
-          }}
+        <Box 
+          bg="red.500" 
+          color="white" 
+          p={4} 
+          borderRadius="md" 
+          textAlign="center"
+          fontWeight="bold"
+          fontSize="xl"
+          boxShadow="lg"
         >
-          {questao}: Is The Wrong Choice!. The correct answer is:{" "}
-          {answers.questions[0]?.correctAnswer}
-        </span>
+          Wrong Answer! The correct answer is: {answers.questions[0]?.correctAnswer}
+        </Box>
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
       setCorrect(0);
@@ -246,9 +247,11 @@ export default function Reservations() {
           onClose={onClose} 
           size="md"
           blockScrollOnMount={false}
+          closeOnOverlayClick={true}
+          closeOnEsc={true}
         >
           <DrawerOverlay backdropFilter="blur(2px)" />
-          <DrawerContent>
+          <DrawerContent bg="white">
             <DrawerCloseButton />
             <DrawerHeader borderBottomWidth="1px">Game Options</DrawerHeader>
 
@@ -647,6 +650,15 @@ export default function Reservations() {
                       </SimpleGrid>
                     </VStack>
                   </Box>
+
+                  
+                  {resultsAnswer && (
+                    <Box w="full">
+                      {resultsAnswer}
+                    </Box>
+                  )}
+
+            
 
                   <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
                     <AdSense adSlot="9876543210" format="rectangle" />
