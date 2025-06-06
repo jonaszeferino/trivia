@@ -5,7 +5,9 @@ import { Box } from '@chakra-ui/react';
 export default function AdSense({ adSlot, format = 'auto' }) {
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      if (window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
     } catch (err) {
       console.error('Erro ao carregar anúncio:', err);
     }
@@ -15,13 +17,13 @@ export default function AdSense({ adSlot, format = 'auto' }) {
   const getAdStyle = () => {
     switch (format) {
       case 'banner':
-        return { width: '100%', height: '90px' };
+        return { width: '100%', height: '90px', position: 'relative', zIndex: 1 };
       case 'rectangle':
-        return { width: '100%', height: '250px' };
+        return { width: '100%', height: '250px', position: 'relative', zIndex: 1 };
       case 'square':
-        return { width: '100%', height: '300px' };
+        return { width: '100%', height: '300px', position: 'relative', zIndex: 1 };
       default:
-        return { width: '100%', height: 'auto' };
+        return { width: '100%', height: 'auto', position: 'relative', zIndex: 1 };
     }
   };
 
@@ -32,12 +34,17 @@ export default function AdSense({ adSlot, format = 'auto' }) {
       borderRadius="md" 
       bg="white"
       boxShadow="sm"
+      position="relative"
+      zIndex={1}
     >
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5165191224568168"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         crossOrigin="anonymous"
+        onError={(e) => {
+          console.error('Erro ao carregar script do AdSense:', e);
+        }}
       />
       <ins
         className="adsbygoogle"

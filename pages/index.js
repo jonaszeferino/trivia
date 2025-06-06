@@ -10,12 +10,7 @@ import {
   Box,
   ChakraProvider,
   SimpleGrid,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
+  Collapse,
   useDisclosure,
   IconButton,
   Heading,
@@ -33,7 +28,7 @@ import { FaLightbulb } from "react-icons/fa";
 import AdSense from "../components/AdSense";
 
 export default function Reservations() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onToggle } = useDisclosure();
   const [answers, setAnswers] = useState({ questions: [] });
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [resultsAnswer, setResultsAnswer] = useState("");
@@ -241,98 +236,6 @@ export default function Reservations() {
   return (
     <div>
       <ChakraProvider>
-        <Drawer 
-          isOpen={isOpen} 
-          placement="right" 
-          onClose={onClose} 
-          size="md"
-          blockScrollOnMount={false}
-          closeOnOverlayClick={true}
-          closeOnEsc={true}
-        >
-          <DrawerOverlay backdropFilter="blur(2px)" />
-          <DrawerContent bg="white">
-            <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">Game Options</DrawerHeader>
-
-            <DrawerBody>
-              <VStack spacing={6} align="stretch">
-                <Box>
-                  <Text fontSize="xl" fontWeight="bold" mb={4}>
-                    Categories
-                  </Text>
-                  <SimpleGrid columns={1} spacing={4}>
-                    {categoryOptions.map((category, index) => (
-                      <Box
-                        key={index}
-                        p={2}
-                        borderRadius="md"
-                        _hover={{ bg: "gray.50" }}
-                      >
-                        <HStack>
-                          <Checkbox
-                            id={category.name}
-                            name={category.name}
-                            isChecked={selectedCategories.includes(category.name)}
-                            onChange={(event) => {
-                              const isChecked = event.target.checked;
-                              setSelectedCategories((prevState) =>
-                                isChecked
-                                  ? [...prevState, category.name]
-                                  : prevState.filter((c) => c !== category.name)
-                              );
-                            }}
-                          />
-                          <label htmlFor={category.name}>
-                            {category.displayName}
-                          </label>
-                        </HStack>
-                      </Box>
-                    ))}
-                  </SimpleGrid>
-                </Box>
-
-                <Box>
-                  <Text fontSize="xl" fontWeight="bold" mb={4}>
-                    Difficulty
-                  </Text>
-                  <SimpleGrid columns={1} spacing={4}>
-                    {difficultyOptions.map((difficulty, index) => (
-                      <Box
-                        key={index}
-                        p={2}
-                        borderRadius="md"
-                        _hover={{ bg: "gray.50" }}
-                      >
-                        <HStack>
-                          <Checkbox
-                            id={difficulty.name}
-                            name={difficulty.name}
-                            isChecked={selectedDifficulties.includes(difficulty.name)}
-                            onChange={(event) => {
-                              const isChecked = event.target.checked;
-                              if (isChecked) {
-                                setSelectedDifficulties([difficulty.name]);
-                              } else {
-                                setSelectedDifficulties((prevState) =>
-                                  prevState.filter((d) => d !== difficulty.name)
-                                );
-                              }
-                            }}
-                          />
-                          <label htmlFor={difficulty.name}>
-                            {difficulty.displayName}
-                          </label>
-                        </HStack>
-                      </Box>
-                    ))}
-                  </SimpleGrid>
-                </Box>
-              </VStack>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-
         <Box 
           minH="100vh" 
           bgGradient="linear(to-b, blue.100, white)"
@@ -381,7 +284,7 @@ export default function Reservations() {
                       Start Game
                     </Button>
                     <Button
-                      onClick={onOpen}
+                      onClick={onToggle}
                       colorScheme="blue"
                       size="lg"
                       px={8}
@@ -391,11 +294,100 @@ export default function Reservations() {
                       }}
                       transition="all 0.2s"
                     >
-                      Options
+                      {isOpen ? "Close Options" : "Options"}
                     </Button>
                   </HStack>
                 </Center>
               </Box>
+
+              <Collapse in={isOpen} animateOpacity>
+                <Box 
+                  w="full" 
+                  bg="white" 
+                  p={6} 
+                  borderRadius="xl" 
+                  boxShadow="lg"
+                  mb={4}
+                >
+                  <VStack spacing={6} align="stretch">
+                    <Box>
+                      <Text fontSize="xl" fontWeight="bold" mb={4}>
+                        Categories
+                      </Text>
+                      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+                        {categoryOptions.map((category, index) => (
+                          <Box
+                            key={index}
+                            p={3}
+                            borderRadius="md"
+                            border="1px"
+                            borderColor="gray.200"
+                            _hover={{ bg: "gray.50" }}
+                          >
+                            <HStack>
+                              <Checkbox
+                                id={category.name}
+                                name={category.name}
+                                isChecked={selectedCategories.includes(category.name)}
+                                onChange={(event) => {
+                                  const isChecked = event.target.checked;
+                                  setSelectedCategories((prevState) =>
+                                    isChecked
+                                      ? [...prevState, category.name]
+                                      : prevState.filter((c) => c !== category.name)
+                                  );
+                                }}
+                              />
+                              <label htmlFor={category.name}>
+                                {category.displayName}
+                              </label>
+                            </HStack>
+                          </Box>
+                        ))}
+                      </SimpleGrid>
+                    </Box>
+
+                    <Box>
+                      <Text fontSize="xl" fontWeight="bold" mb={4}>
+                        Difficulty
+                      </Text>
+                      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+                        {difficultyOptions.map((difficulty, index) => (
+                          <Box
+                            key={index}
+                            p={3}
+                            borderRadius="md"
+                            border="1px"
+                            borderColor="gray.200"
+                            _hover={{ bg: "gray.50" }}
+                          >
+                            <HStack>
+                              <Checkbox
+                                id={difficulty.name}
+                                name={difficulty.name}
+                                isChecked={selectedDifficulties.includes(difficulty.name)}
+                                onChange={(event) => {
+                                  const isChecked = event.target.checked;
+                                  if (isChecked) {
+                                    setSelectedDifficulties([difficulty.name]);
+                                  } else {
+                                    setSelectedDifficulties((prevState) =>
+                                      prevState.filter((d) => d !== difficulty.name)
+                                    );
+                                  }
+                                }}
+                              />
+                              <label htmlFor={difficulty.name}>
+                                {difficulty.displayName}
+                              </label>
+                            </HStack>
+                          </Box>
+                        ))}
+                      </SimpleGrid>
+                    </Box>
+                  </VStack>
+                </Box>
+              </Collapse>
 
               {/* AdSense Banner Superior */}
               <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
