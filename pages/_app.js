@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 export default function App({ Component, pageProps }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
+  const [showGameOptions, setShowGameOptions] = useState(false);
 
   return (
     <ChakraProvider>
@@ -20,6 +21,8 @@ export default function App({ Component, pageProps }) {
         setSelectedCategories={setSelectedCategories}
         selectedDifficulties={selectedDifficulties}
         setSelectedDifficulties={setSelectedDifficulties}
+        showGameOptions={showGameOptions}
+        setShowGameOptions={setShowGameOptions}
       />
     </ChakraProvider>
   );
