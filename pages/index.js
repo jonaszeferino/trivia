@@ -427,11 +427,11 @@ export default function Reservations() {
                           Did You Know?
                         </Heading>
                         <Text fontSize="lg" color="gray.600">
-                          The word "trivia" comes from the Latin "trivium," meaning "the place where three roads meet." 
+                          The word &quot;trivia&quot; comes from the Latin &quot;trivium,&quot; meaning &quot;the place where three roads meet.&quot; 
                           In ancient times, this was where people would gather to share knowledge and stories.
                         </Text>
                         <Text fontSize="lg" color="gray.600">
-                          Modern trivia games became popular in the 1960s with the board game "Trivial Pursuit," 
+                          Modern trivia games became popular in the 1960s with the board game &quot;Trivial Pursuit,&quot; 
                           which has sold over 100 million copies worldwide.
                         </Text>
                       </VStack>
