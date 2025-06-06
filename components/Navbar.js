@@ -122,10 +122,12 @@ export default function Navbar({
               borderRadius="xl" 
               boxShadow="lg"
               mb={4}
+              position="relative"
+              zIndex={1000}
             >
               <VStack spacing={6} align="stretch">
                 <Box>
-                  <Text fontSize="xl" fontWeight="bold" mb={4}>
+                  <Text fontSize="xl" fontWeight="bold" mb={4} color="black">
                     Categories
                   </Text>
                   <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
@@ -152,9 +154,9 @@ export default function Navbar({
                               );
                             }}
                           />
-                          <label htmlFor={category.name}>
+                          <Text color="black" as="label" htmlFor={category.name}>
                             {category.displayName}
-                          </label>
+                          </Text>
                         </HStack>
                       </Box>
                     ))}
@@ -162,7 +164,7 @@ export default function Navbar({
                 </Box>
 
                 <Box>
-                  <Text fontSize="xl" fontWeight="bold" mb={4}>
+                  <Text fontSize="xl" fontWeight="bold" mb={4} color="black">
                     Difficulty
                   </Text>
                   <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
@@ -191,9 +193,9 @@ export default function Navbar({
                               }
                             }}
                           />
-                          <label htmlFor={difficulty.name}>
+                          <Text color="black" as="label" htmlFor={difficulty.name}>
                             {difficulty.displayName}
-                          </label>
+                          </Text>
                         </HStack>
                       </Box>
                     ))}

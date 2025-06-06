@@ -26,13 +26,13 @@ import { Alert, Space } from "antd";
 import { supabase } from "../utils/supabaseClient";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { FaLightbulb } from "react-icons/fa";
-// import AdSense from "../components/AdSense";
+import AdSense from "../components/AdSense";
 import dynamic from "next/dynamic";
 
 // Carrega componentes que usam window apenas no client-side
-// const DynamicAdSense = dynamic(() => import("../components/AdSense"), {
-//   ssr: false,
-// });
+const DynamicAdSense = dynamic(() => import("../components/AdSense"), {
+  ssr: false,
+});
 
 export default function Reservations() {
   const [mounted, setMounted] = useState(false);
@@ -209,26 +209,6 @@ export default function Reservations() {
       subscription?.unsubscribe();
     };
   }, []);
-
-  const insertStats = async () => {
-    try {
-      const response = await fetch("/api/v1/postStatsTrivia", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_email: session?.user?.email || "not logged in",
-          questionId: answers.questions[0]?.id,
-          correct: correct,
-          difficulty: answers.questions[0]?.difficulty,
-        }),
-      });
-      return;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   if (!mounted) return null;
 
@@ -541,7 +521,6 @@ export default function Reservations() {
                           onClick={() => {
                             getResultAnswer(shuffledAnswers[0], "A");
                             setIsClickedA("#0070f3");
-                            insertStats();
                           }}
                           isDisabled={isDisabled}
                           colorScheme={isClickedA ? "teal" : "gray"}
@@ -563,7 +542,6 @@ export default function Reservations() {
                           onClick={() => {
                             getResultAnswer(shuffledAnswers[1], "B");
                             setIsClickedB("#0070f3");
-                            insertStats();
                           }}
                           isDisabled={isDisabled}
                           colorScheme={isClickedB ? "teal" : "gray"}
@@ -585,7 +563,6 @@ export default function Reservations() {
                           onClick={() => {
                             getResultAnswer(shuffledAnswers[2], "C");
                             setIsClickedC("#0070f3");
-                            insertStats();
                           }}
                           isDisabled={isDisabled}
                           colorScheme={isClickedC ? "teal" : "gray"}
@@ -607,7 +584,6 @@ export default function Reservations() {
                           onClick={() => {
                             getResultAnswer(shuffledAnswers[3], "D");
                             setIsClickedD("#0070f3");
-                            insertStats();
                           }}
                           isDisabled={isDisabled}
                           colorScheme={isClickedD ? "teal" : "gray"}
@@ -635,8 +611,7 @@ export default function Reservations() {
                   )}
 
                   <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
-                    {/* Temporariamente comentado para teste */}
-                    {/* <DynamicAdSense adSlot="9876543210" format="rectangle" /> */}
+                    <DynamicAdSense adSlot="9876543210" format="rectangle" />
                   </Box>
 
                   <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
