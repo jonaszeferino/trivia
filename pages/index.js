@@ -40,7 +40,7 @@ export default function Reservations({
   selectedDifficulties,
   setSelectedDifficulties,
   showGameOptions,
-  setShowGameOptions
+  setShowGameOptions,
 }) {
   const [mounted, setMounted] = useState(false);
   const { isOpen, onToggle } = useDisclosure();
@@ -136,11 +136,11 @@ export default function Reservations({
     setisDisabled(true);
     if (recebido === answers.questions[0]?.correctAnswer) {
       setResultsAnswer(
-        <Box 
-          bg="green.500" 
-          color="white" 
-          p={4} 
-          borderRadius="md" 
+        <Box
+          bg="green.500"
+          color="white"
+          p={4}
+          borderRadius="md"
           textAlign="center"
           fontWeight="bold"
           fontSize="xl"
@@ -153,17 +153,18 @@ export default function Reservations({
       setCorrect(1);
     } else {
       setResultsAnswer(
-        <Box 
-          bg="red.500" 
-          color="white" 
-          p={4} 
-          borderRadius="md" 
+        <Box
+          bg="red.500"
+          color="white"
+          p={4}
+          borderRadius="md"
           textAlign="center"
           fontWeight="bold"
           fontSize="xl"
           boxShadow="lg"
         >
-          Wrong Answer! The correct answer is: {answers.questions[0]?.correctAnswer}
+          Wrong Answer! The correct answer is:{" "}
+          {answers.questions[0]?.correctAnswer}
         </Box>
       );
       setTotalWrongQuestions(totalWrongQuestions + 1);
@@ -220,18 +221,14 @@ export default function Reservations({
   return (
     <div>
       <ChakraProvider>
-        <Box 
-          minH="100vh" 
-          bgGradient="linear(to-b, blue.100, white)"
-          py={8}
-        >
+        <Box minH="100vh" bgGradient="linear(to-b, blue.100, white)" py={8}>
           <Container maxW="container.xl">
             <VStack spacing={8}>
-              <Box 
-                w="full" 
-                bg="white" 
-                p={6} 
-                borderRadius="xl" 
+              <Box
+                w="full"
+                bg="white"
+                p={6}
+                borderRadius="xl"
                 boxShadow="lg"
                 position="relative"
                 _before={{
@@ -242,7 +239,7 @@ export default function Reservations({
                   right: 0,
                   height: "4px",
                   bgGradient: "linear(to-r, blue.500, blue.600)",
-                  borderTopRadius: "xl"
+                  borderTopRadius: "xl",
                 }}
               >
                 {firstTime && (
@@ -250,6 +247,15 @@ export default function Reservations({
                     <Text fontSize="lg" textAlign="center">
                       Select categories and difficulty to start playing!
                     </Text>
+                    <Button
+                      colorScheme="teal"
+                      size="md"
+                      mt={2}
+                      onClick={() => setShowGameOptions(!showGameOptions)}
+                    >
+                      {showGameOptions ? "Hide Options" : "Show Options"}
+                    </Button>
+
                     <Button
                       colorScheme="blue"
                       size="lg"
@@ -262,11 +268,11 @@ export default function Reservations({
                     </Button>
 
                     {showGameOptions && (
-                      <Box 
-                        w="full" 
-                        bg="white" 
-                        p={6} 
-                        borderRadius="xl" 
+                      <Box
+                        w="full"
+                        bg="white"
+                        p={6}
+                        borderRadius="xl"
                         boxShadow="lg"
                         mt={4}
                       >
@@ -275,7 +281,10 @@ export default function Reservations({
                             <Text fontSize="xl" fontWeight="bold" mb={4}>
                               Categories
                             </Text>
-                            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+                            <SimpleGrid
+                              columns={{ base: 1, md: 2, lg: 3 }}
+                              spacing={4}
+                            >
                               {categoryOptions.map((category, index) => (
                                 <Box
                                   key={index}
@@ -289,13 +298,17 @@ export default function Reservations({
                                     <Checkbox
                                       id={category.name}
                                       name={category.name}
-                                      isChecked={selectedCategories.includes(category.name)}
+                                      isChecked={selectedCategories.includes(
+                                        category.name
+                                      )}
                                       onChange={(event) => {
                                         const isChecked = event.target.checked;
                                         setSelectedCategories((prevState) =>
                                           isChecked
                                             ? [...prevState, category.name]
-                                            : prevState.filter((c) => c !== category.name)
+                                            : prevState.filter(
+                                                (c) => c !== category.name
+                                              )
                                         );
                                       }}
                                     />
@@ -312,7 +325,10 @@ export default function Reservations({
                             <Text fontSize="xl" fontWeight="bold" mb={4}>
                               Difficulty
                             </Text>
-                            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+                            <SimpleGrid
+                              columns={{ base: 1, md: 3 }}
+                              spacing={4}
+                            >
                               {difficultyOptions.map((difficulty, index) => (
                                 <Box
                                   key={index}
@@ -326,14 +342,20 @@ export default function Reservations({
                                     <Checkbox
                                       id={difficulty.name}
                                       name={difficulty.name}
-                                      isChecked={selectedDifficulties.includes(difficulty.name)}
+                                      isChecked={selectedDifficulties.includes(
+                                        difficulty.name
+                                      )}
                                       onChange={(event) => {
                                         const isChecked = event.target.checked;
                                         if (isChecked) {
-                                          setSelectedDifficulties([difficulty.name]);
+                                          setSelectedDifficulties([
+                                            difficulty.name,
+                                          ]);
                                         } else {
                                           setSelectedDifficulties((prevState) =>
-                                            prevState.filter((d) => d !== difficulty.name)
+                                            prevState.filter(
+                                              (d) => d !== difficulty.name
+                                            )
                                           );
                                         }
                                       }}
@@ -359,9 +381,9 @@ export default function Reservations({
 
               {firstTime && (
                 <VStack spacing={6} align="stretch" w="full">
-                  <Heading 
-                    as="h1" 
-                    size="xl" 
+                  <Heading
+                    as="h1"
+                    size="xl"
                     bgGradient="linear(to-r, blue.400, blue.800)"
                     bgClip="text"
                     textAlign="center"
@@ -371,14 +393,14 @@ export default function Reservations({
                   </Heading>
 
                   <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                    <Box 
-                      p={6} 
-                      borderRadius="xl" 
-                      boxShadow="lg" 
+                    <Box
+                      p={6}
+                      borderRadius="xl"
+                      boxShadow="lg"
                       bg="white"
                       _hover={{
                         transform: "translateY(-2px)",
-                        boxShadow: "xl"
+                        boxShadow: "xl",
                       }}
                       transition="all 0.2s"
                     >
@@ -387,24 +409,28 @@ export default function Reservations({
                           Did You Know?
                         </Heading>
                         <Text fontSize="lg" color="gray.600">
-                          The word &quot;trivia&quot; comes from the Latin &quot;trivium,&quot; meaning &quot;the place where three roads meet.&quot; 
-                          In ancient times, this was where people would gather to share knowledge and stories.
+                          The word &quot;trivia&quot; comes from the Latin
+                          &quot;trivium,&quot; meaning &quot;the place where
+                          three roads meet.&quot; In ancient times, this was
+                          where people would gather to share knowledge and
+                          stories.
                         </Text>
                         <Text fontSize="lg" color="gray.600">
-                          Modern trivia games became popular in the 1960s with the board game &quot;Trivial Pursuit,&quot; 
-                          which has sold over 100 million copies worldwide.
+                          Modern trivia games became popular in the 1960s with
+                          the board game &quot;Trivial Pursuit,&quot; which has
+                          sold over 100 million copies worldwide.
                         </Text>
                       </VStack>
                     </Box>
 
-                    <Box 
-                      p={6} 
-                      borderRadius="xl" 
-                      boxShadow="lg" 
+                    <Box
+                      p={6}
+                      borderRadius="xl"
+                      boxShadow="lg"
                       bg="white"
                       _hover={{
                         transform: "translateY(-2px)",
-                        boxShadow: "xl"
+                        boxShadow: "xl",
                       }}
                       transition="all 0.2s"
                     >
@@ -415,16 +441,18 @@ export default function Reservations({
                         <VStack spacing={3} align="stretch">
                           {[
                             "Choose your preferred categories and difficulty level",
-                            "Click \"Start Game\" to begin",
+                            'Click "Start Game" to begin',
                             "Read each question carefully and select your answer",
                             "Get immediate feedback on your answer",
-                            "Track your score as you play"
+                            "Track your score as you play",
                           ].map((step, index) => (
                             <HStack key={index} spacing={3}>
                               <Circle size="6" bg="blue.500" color="white">
                                 {index + 1}
                               </Circle>
-                              <Text fontSize="lg" color="gray.600">{step}</Text>
+                              <Text fontSize="lg" color="gray.600">
+                                {step}
+                              </Text>
                             </HStack>
                           ))}
                         </VStack>
@@ -432,14 +460,14 @@ export default function Reservations({
                     </Box>
                   </SimpleGrid>
 
-                  <Box 
-                    p={6} 
-                    borderRadius="xl" 
-                    boxShadow="lg" 
+                  <Box
+                    p={6}
+                    borderRadius="xl"
+                    boxShadow="lg"
                     bg="white"
                     _hover={{
                       transform: "translateY(-2px)",
-                      boxShadow: "xl"
+                      boxShadow: "xl",
                     }}
                     transition="all 0.2s"
                   >
@@ -451,11 +479,13 @@ export default function Reservations({
                         {[
                           "The world's largest trivia contest is held annually in Wisconsin, USA, lasting 54 hours straight!",
                           "The first known trivia game was created in 1964 by Canadian journalists Scott Abbott and Chris Haney.",
-                          "Trivia games are proven to help improve memory and cognitive function."
+                          "Trivia games are proven to help improve memory and cognitive function.",
                         ].map((fact, index) => (
                           <HStack key={index} spacing={3}>
                             <Icon as={FaLightbulb} color="blue.500" />
-                            <Text fontSize="lg" color="gray.600">{fact}</Text>
+                            <Text fontSize="lg" color="gray.600">
+                              {fact}
+                            </Text>
                           </HStack>
                         ))}
                       </VStack>
@@ -491,7 +521,7 @@ export default function Reservations({
                     px={8}
                     _hover={{
                       transform: "translateY(-2px)",
-                      boxShadow: "lg"
+                      boxShadow: "lg",
                     }}
                     transition="all 0.2s"
                   >
@@ -502,18 +532,22 @@ export default function Reservations({
 
               {!firstTime && answers.questions.length > 0 && (
                 <VStack spacing={6}>
-                  <Box 
-                    w="full" 
-                    bg="white" 
-                    p={6} 
-                    borderRadius="xl" 
+                  <Box
+                    w="full"
+                    bg="white"
+                    p={6}
+                    borderRadius="xl"
                     boxShadow="lg"
                   >
                     <VStack spacing={4}>
                       <Heading as="h2" size="lg" color="black">
                         {answers.questions[0]?.question}
                       </Heading>
-                      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
+                      <SimpleGrid
+                        columns={{ base: 1, md: 2 }}
+                        spacing={4}
+                        w="full"
+                      >
                         <Button
                           style={{ backgroundColor: isClickedA }}
                           onClick={() => {
@@ -529,7 +563,7 @@ export default function Reservations({
                           textAlign="left"
                           _hover={{
                             transform: "translateY(-2px)",
-                            boxShadow: "lg"
+                            boxShadow: "lg",
                           }}
                           transition="all 0.2s"
                         >
@@ -550,7 +584,7 @@ export default function Reservations({
                           textAlign="left"
                           _hover={{
                             transform: "translateY(-2px)",
-                            boxShadow: "lg"
+                            boxShadow: "lg",
                           }}
                           transition="all 0.2s"
                         >
@@ -571,7 +605,7 @@ export default function Reservations({
                           textAlign="left"
                           _hover={{
                             transform: "translateY(-2px)",
-                            boxShadow: "lg"
+                            boxShadow: "lg",
                           }}
                           transition="all 0.2s"
                         >
@@ -592,7 +626,7 @@ export default function Reservations({
                           textAlign="left"
                           _hover={{
                             transform: "translateY(-2px)",
-                            boxShadow: "lg"
+                            boxShadow: "lg",
                           }}
                           transition="all 0.2s"
                         >
@@ -602,13 +636,15 @@ export default function Reservations({
                     </VStack>
                   </Box>
 
-                  {resultsAnswer && (
-                    <Box w="full">
-                      {resultsAnswer}
-                    </Box>
-                  )}
+                  {resultsAnswer && <Box w="full">{resultsAnswer}</Box>}
 
-                  <Box w="full" bg="white" p={4} borderRadius="xl" boxShadow="md">
+                  <Box
+                    w="full"
+                    bg="white"
+                    p={4}
+                    borderRadius="xl"
+                    boxShadow="md"
+                  >
                     <DynamicAdSense adSlot="9876543210" format="rectangle" />
                   </Box>
 
@@ -635,7 +671,9 @@ export default function Reservations({
                       bg="white"
                     >
                       <StatLabel color="gray.500">Correct Answers</StatLabel>
-                      <StatNumber color="green.500">{totalCorrectQuestions}</StatNumber>
+                      <StatNumber color="green.500">
+                        {totalCorrectQuestions}
+                      </StatNumber>
                     </Stat>
                     <Stat
                       px={6}
@@ -647,7 +685,9 @@ export default function Reservations({
                       bg="white"
                     >
                       <StatLabel color="gray.500">Wrong Answers</StatLabel>
-                      <StatNumber color="red.500">{totalWrongQuestions}</StatNumber>
+                      <StatNumber color="red.500">
+                        {totalWrongQuestions}
+                      </StatNumber>
                     </Stat>
                   </SimpleGrid>
                 </VStack>
